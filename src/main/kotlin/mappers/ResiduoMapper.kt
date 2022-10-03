@@ -1,4 +1,5 @@
 package mappers
 
 class ResiduoMapper {
+
 }
