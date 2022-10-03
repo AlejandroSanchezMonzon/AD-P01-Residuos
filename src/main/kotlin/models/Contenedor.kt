@@ -19,34 +19,80 @@ data class Contenedor(
     val direccion: String
 
 ) {
+    override fun toString(): String {
+        return "Contenedor(codigo=$codigo, contenedor=$contenedor," +
+                " modelo='$modelo', descripcion='$descripcion'," +
+                " cantidad=$cantidad, lote=$lote, distrito='$distrito'," +
+                " barrio='$barrio', via=$via, nombre='$nombre', numero=$numero," +
+                " coordenadaX=$coordenadaX, coordenadaY=$coordenadaY," +
+                " longitud='$longitud', latitud='$latitud', direccion='$direccion')"
+    }
 }
 
-enum class TipoContenedor{
-    ORANICA,
-    RESTO,
-    ENVASES,
-    VIDRIO_PAPEL,
-    CARTON
+enum class TipoContenedor(val tipo: String) {
+    ORGANICA("ORGANICA"),
+    RESTO("RESTO"),
+    ENVASES("ENVASES"),
+    VIDRIO_PAPEL("VIDRIO_PAPEL"),
+    CARTON("CARTON");
+
+    companion object {
+        fun from(contenedor: String): TipoContenedor {
+            return when (contenedor.uppercase()) {
+                "ORGANICA" -> ORGANICA
+                "RESTO" -> RESTO
+                "ENVASES" -> ENVASES
+                "VIDRIO_PAPEL" -> VIDRIO_PAPEL
+                "CARTON" -> CARTON
+                else -> throw IllegalArgumentException("Tipo de contenedor no reconocido")
+            }
+        }
+    }
 }
 
-enum class TipoVia{
-    CALLE,
-    AVENIDA,
-    PASEO,
-    RONDA,
-    PLAZA,
-    GLORIETA,
-    COLONIA,
-    CARRETERA,
-    BULEVAR,
-    CAMINO,
-    PARTICULAR,
-    TRAVESIA,
-    PASAJE,
-    CALLEJON,
-    CUESTA,
-    COSTANILLA,
-    AUTOVIA,
-    CARRERA
+enum class TipoVia(val tipo: String) {
+    CALLE("CALLE"),
+    AVENIDA("AVENIDA"),
+    PASEO("PASEO"),
+    RONDA("RONDA"),
+    PLAZA("PLAZA"),
+    GLORIETA("GLORIETA"),
+    COLONIA("COLONIA"),
+    CARRETERA("CARRETERA"),
+    BULEVAR("BULEVAR"),
+    CAMINO("CAMINO"),
+    PARTICULAR("PARTICULAR"),
+    TRAVESIA("TRAVESIA"),
+    PASAJE("PASAJE"),
+    CALLEJON("CALLEJON"),
+    CUESTA("CUESTA"),
+    COSTANILLA("COSTANILLA"),
+    AUTOVIA("AUTOVIA"),
+    CARRERA("CARRERA");
 
+    companion object {
+        fun from(via: String): TipoVia {
+            return when (via.uppercase()) {
+                "CALLE" -> CALLE
+                "AVENIDA" -> AVENIDA
+                "PASEO" -> PASEO
+                "RONDA" -> RONDA
+                "PLAZA" -> PLAZA
+                "GLORIETA" -> GLORIETA
+                "COLONIA" -> COLONIA
+                "CARRETERA" -> CARRETERA
+                "BULEVAR" -> BULEVAR
+                "CAMINO" -> CAMINO
+                "PARTICULAR" -> PARTICULAR
+                "TRAVESIA" -> TRAVESIA
+                "PASAJE" -> PASAJE
+                "CALLEJON" -> CALLEJON
+                "CUESTA" -> CUESTA
+                "COSTANILLA" -> COSTANILLA
+                "AUTOVIA" -> AUTOVIA
+                "CARRERA" -> CARRERA
+                else -> throw IllegalArgumentException("Tipo de via no reconocida")
+            }
+        }
+    }
 }

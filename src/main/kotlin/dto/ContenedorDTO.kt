@@ -20,4 +20,6 @@ data class ContenedorDTO (
     val longitud: String,
     val latitud: String,
     val direccion: String
-)
+){
+
+}
