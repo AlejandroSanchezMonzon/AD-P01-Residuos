@@ -15,9 +15,15 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
 
+    //Serialization para JSON
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
+
+    //Serialization para XML
     implementation("io.github.pdvrieze.xmlutil:core-jvm:0.84.3")
     implementation("io.github.pdvrieze.xmlutil:serialization-jvm:0.84.3")
+
+    //DSL para HTML: https://ktor.io/docs/html-dsl.html
+    implementation("io.ktor:ktor-server-html-builder:2.1.1")
 }
 
 tasks.test {
