@@ -16,6 +16,8 @@ dependencies {
     testImplementation(kotlin("test"))
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
+    implementation("io.github.pdvrieze.xmlutil:core-jvm:0.84.3")
+    implementation("io.github.pdvrieze.xmlutil:serialization-jvm:0.84.3")
 }
 
 tasks.test {
