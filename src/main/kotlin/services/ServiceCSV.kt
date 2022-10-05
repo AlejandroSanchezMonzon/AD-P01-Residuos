@@ -2,6 +2,7 @@ package services
 
 import dto.ContenedorDTO
 import dto.ResiduoDTO
+import org.jetbrains.annotations.Nullable
 import java.io.File
 
 class ServiceCSV {
@@ -20,8 +21,8 @@ class ServiceCSV {
                         residuo = campo[3],
                         distrito = campo[4].toInt(),
                         nombreDistrito = campo[5],
-                        //TODO: cuidado con las comas del double
-                        toneladas = campo[6].toDouble(),
+                        //Cuidado con las comas del double.
+                        toneladas = parseDouble(campo[6]),
 
                     )
                 }
@@ -31,7 +32,7 @@ class ServiceCSV {
     }
 
     fun writeCSVResiduo(residuos: List<ResiduoDTO>) {
-        val ficheroResiduo = File(directorio + File.separator + "resultado_residuos.csv")
+        val ficheroResiduo = File(directorio + File.separator + "output" + File.separator + "resultado_residuos.csv")
         ficheroResiduo.writeText("anio;mes;lote;residuo;distrito;nombreDistrito;toneladas")
         residuos.forEach {
             ficheroResiduo.appendText("\n${it.anio};${it.mes};${it.lote};${it.residuo};${it.distrito};${it.nombreDistrito};${it.toneladas}")
@@ -52,12 +53,12 @@ class ServiceCSV {
                         cantidad = campo[4].toInt(),
                         lote = campo[5].toInt(),
                         distrito = campo[6],
-                        barrio = campo[7],
+                        barrio = parseNull(campo[7]),
                         via = campo[8],
                         nombre = campo[9],
-                        numero = campo[10].toInt(),
-                        coordenadaX = campo[11].toDouble(),
-                        coordenadaY = campo[12].toDouble(),
+                        numero = campo[10].toIntOrNull(),
+                        coordenadaX = parseDouble(campo[11]),
+                        coordenadaY = parseDouble(campo[12]),
                         longitud = campo[13],
                         latitud = campo[14],
                         direccion = campo[15]
@@ -70,11 +71,23 @@ class ServiceCSV {
     }
 
     fun writeCSVContenedor(contenedores: List<ContenedorDTO>) {
-        val ficheroContenedor = File(directorio + File.separator + "resultado_contendores.csv")
+        val ficheroContenedor = File(directorio + File.separator + "output" + File.separator + "resultado_contendores.csv")
         //TODO: tiene que tener la misma cabecera o podemos cambiar los nombres de las columnas
         ficheroContenedor.writeText("codigo;contenedor;modelo;descripcion;cantidad;lote;distrito;barrio;via;nombre;numero;coordenadaX,coordenadaY;longitud;latitud;direccion")
         contenedores.forEach {
             ficheroContenedor.appendText("\n${it.codigo};${it.contenedor};${it.modelo};${it.descripcion};${it.cantidad};${it.lote};${it.distrito};${it.barrio};${it.via};${it.nombre};${it.numero};${it.coordenadaX};${it.coordenadaY};${it.longitud};${it.latitud}${it.direccion}")
         }
+    }
+
+    private fun parseNull(s: String): String {
+        var aux = ""
+        if (s.isEmpty()) {
+            aux = "null"
+        }
+        return aux
+    }
+
+    private fun parseDouble(s: String): Double {
+        return s.replace(",", ".").toDouble()
     }
 }

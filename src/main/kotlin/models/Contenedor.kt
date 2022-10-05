@@ -8,10 +8,10 @@ data class Contenedor(
     val cantidad: Int,
     val lote: Int,
     val distrito: String,
-    val barrio: String,
+    val barrio: String?,
     val via: TipoVia,
     val nombre: String,
-    val numero: Int,
+    val numero: Int?,
     val coordenadaX: Double,
     val coordenadaY: Double,
     val longitud: String,
@@ -33,8 +33,8 @@ enum class TipoContenedor(val tipo: String) {
     ORGANICA("ORGANICA"),
     RESTO("RESTO"),
     ENVASES("ENVASES"),
-    VIDRIO_PAPEL("VIDRIO_PAPEL"),
-    CARTON("CARTON");
+    VIDRIO("VIDRIO"),
+    PAPEL_CARTON("PAPEL-CARTON");
 
     companion object {
         fun from(contenedor: String): TipoContenedor {
@@ -42,8 +42,8 @@ enum class TipoContenedor(val tipo: String) {
                 "ORGANICA" -> ORGANICA
                 "RESTO" -> RESTO
                 "ENVASES" -> ENVASES
-                "VIDRIO_PAPEL" -> VIDRIO_PAPEL
-                "CARTON" -> CARTON
+                "VIDRIO" -> VIDRIO
+                "PAPEL-CARTON" -> PAPEL_CARTON
                 else -> throw IllegalArgumentException("Tipo de contenedor no reconocido")
             }
         }
@@ -62,8 +62,10 @@ enum class TipoVia(val tipo: String) {
     BULEVAR("BULEVAR"),
     CAMINO("CAMINO"),
     PARTICULAR("PARTICULAR"),
+    //TODO Algunos enum vienen con "TRAVESÍA" con tilde.
     TRAVESIA("TRAVESIA"),
     PASAJE("PASAJE"),
+    //TODO Algunos enum vienen con "CALLEJÓN" con tilde.
     CALLEJON("CALLEJON"),
     CUESTA("CUESTA"),
     COSTANILLA("COSTANILLA"),
