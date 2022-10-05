@@ -1,7 +1,15 @@
-fun main(args: Array<String>) {
-    println("Hello World!")
+import services.ServiceCSV
+import services.ServiceJSON
+import services.ServiceXML
 
-    // Try adding program arguments via Run/Debug configuration.
-    // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
-    println("Program arguments: ${args.joinToString()}")
+fun main(args: Array<String>) {
+    val serviceCSV = ServiceCSV()
+    val serviceJSON = ServiceJSON()
+    val serviceXML = ServiceXML()
+
+    serviceXML.writeXMLContendores(serviceCSV.readCSVContenedor())
+    serviceXML.writeXMLResiduos(serviceCSV.readCSVResiduo())
+
+    serviceJSON.writeJSONContenedor(serviceCSV.readCSVContenedor())
+    serviceJSON.writeJSONResiduo(serviceCSV.readCSVResiduo())
 }

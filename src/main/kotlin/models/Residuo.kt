@@ -21,19 +21,19 @@ enum class TipoResiduo(val tipo: String) {
     ENVASES("ENVASES"),
     VIDRIO("VIDRIO"),
     ORGANICA("ORGANICA"),
-    PAPEL_CARTON("PAPEL_CARTON"),
-    PUNTOS_LIMPIOS("PUNTOS_LIMPIOS"),
-    CARTON_COMERCIAL("CARTON_COMERCIAL"),
-    VIDRIO_COMERCIAL("VIDRIO_COMERCIAL"),
+    PAPEL_CARTON("PAPEL-CARTON"),
+    PUNTOS_LIMPIOS("PUNTOS LIMPIOS"),
+    CARTON_COMERCIAL("CARTON COMERCIAL"),
+    VIDRIO_COMERCIAL("VIDRIO COMERCIAL"),
     PILAS("PILAS"),
-    ANIMALES_MUERTOS("ANIMALES_MUERTOS"),
+    ANIMALES_MUERTOS("ANIMALES MUERTOS"),
     RCD("RCD"),
-    CONTENEDORES_ROPA("CONTENEDORES_ROPA"),
+    CONTENEDORES_ROPA("CONTENEDORES DE ROPA"),
     RESIDUOS_DEPOSITADOS_MIGAS_CALIENTES("RESIDUOS_DEPOSITADOS_MIGAS_CALIENTES"),
 
     //Tipos añadidos
     CLINICOS("CLINICOS"),
-    CAMA_CABALLO("CAMA_CABALLO");
+    CAMA_CABALLO("CAMA DE CABALLO");
 
     companion object {
         fun from(residuo: String): TipoResiduo {
@@ -42,17 +42,17 @@ enum class TipoResiduo(val tipo: String) {
                 "ENVASES" -> ENVASES
                 "VIDRIO" -> VIDRIO
                 "ORGANICA" -> ORGANICA
-                "PAPEL_CARTON" -> PAPEL_CARTON
-                "PUNTOS_LIMPIOS" -> PUNTOS_LIMPIOS
-                "CARTON_COMERCIAL" -> CARTON_COMERCIAL
-                "VIDRIO_COMERCIAL" -> VIDRIO_COMERCIAL
+                "PAPEL-CARTON" -> PAPEL_CARTON
+                "PUNTOS LIMPIOS" -> PUNTOS_LIMPIOS
+                "CARTON COMERCIAL" -> CARTON_COMERCIAL
+                "VIDRIO COMERCIAL" -> VIDRIO_COMERCIAL
                 "PILAS" -> PILAS
-                "ANIMALES_MUERTOS" -> ANIMALES_MUERTOS
+                "ANIMALES MUERTOS" -> ANIMALES_MUERTOS
                 "RCD" -> RCD
-                "CONTENEDORES_ROPA" -> CONTENEDORES_ROPA
+                "CONTENEDORES DE ROPA" -> CONTENEDORES_ROPA
                 "RESIDUOS_DEPOSITADOS_MIGAS_CALIENTES" -> RESIDUOS_DEPOSITADOS_MIGAS_CALIENTES
                 "CLINICOS" -> CLINICOS
-                "CAMA_CABALLO" -> CAMA_CABALLO
+                "CAMA DE CABALLO" -> CAMA_CABALLO
                 else -> throw IllegalArgumentException("Tipo de residuo no reconocido.")
             }
         }

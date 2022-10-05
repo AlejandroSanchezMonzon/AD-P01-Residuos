@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.7.20"
+    kotlin("plugin.serialization") version "1.7.20"
     application
 }
 
@@ -23,7 +24,7 @@ dependencies {
     implementation("io.github.pdvrieze.xmlutil:serialization-jvm:0.84.3")
 
     //DSL para HTML: https://ktor.io/docs/html-dsl.html
-    implementation("io.ktor:ktor-server-html-builder:2.1.1")
+    implementation("io.ktor:ktor-server-html-builder:2.1.2")
 }
 
 tasks.test {
