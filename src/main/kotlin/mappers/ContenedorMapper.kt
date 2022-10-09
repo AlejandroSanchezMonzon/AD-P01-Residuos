@@ -8,7 +8,7 @@ import models.TipoVia
 fun ContenedorDTO.toContenedor(): Contenedor {
     return Contenedor(
         codigo = this.codigo,
-        contenedor = TipoContenedor.from(this.contenedor),
+        tipo = TipoContenedor.from(this.tipo),
         modelo = this.modelo,
         descripcion = this.descripcion,
         cantidad = this.cantidad,
@@ -29,7 +29,7 @@ fun ContenedorDTO.toContenedor(): Contenedor {
 fun Contenedor.toDTO(): ContenedorDTO {
     return ContenedorDTO(
         codigo = this.codigo,
-        contenedor = this.contenedor.toString(),
+        tipo = this.tipo.toString(),
         modelo = this.modelo,
         descripcion = this.descripcion,
         cantidad = this.cantidad,

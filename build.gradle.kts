@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.7.20"
     kotlin("plugin.serialization") version "1.7.20"
-    application
 }
 
 group = "org.example"
@@ -23,8 +22,14 @@ dependencies {
     implementation("io.github.pdvrieze.xmlutil:core-jvm:0.84.3")
     implementation("io.github.pdvrieze.xmlutil:serialization-jvm:0.84.3")
 
-    //DSL para HTML: https://ktor.io/docs/html-dsl.html
-    implementation("io.ktor:ktor-server-html-builder:2.1.2")
+    // DataFrames de Kotlin
+    implementation("org.jetbrains.kotlinx:dataframe:0.8.1")
+
+    //DSL para HTML: https://ktor.io/docs/html-dsl.html , https://kotlinlang.org/docs/typesafe-html-dsl.html
+    //implementation("io.ktor:ktor-server-html-builder:2.1.2")
+    //implementation("io.ktor:ktor-server-netty:2.1.2")
+    //implementation(kotlin("stdlib-js"))
+    //implementation("org.jetbrains.kotlinx:kotlinx-html-js:0.8.0")
 }
 
 tasks.test {
@@ -33,8 +38,4 @@ tasks.test {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
-}
-
-application {
-    mainClass.set("MainKt")
 }
