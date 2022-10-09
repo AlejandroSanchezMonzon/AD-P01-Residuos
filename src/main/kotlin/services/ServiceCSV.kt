@@ -2,7 +2,6 @@ package services
 
 import dto.ContenedorDTO
 import dto.ResiduoDTO
-import org.jetbrains.annotations.Nullable
 import java.io.File
 
 class ServiceCSV {
@@ -18,7 +17,7 @@ class ServiceCSV {
                         anio = campo[0].toInt(),
                         mes = campo[1],
                         lote = campo[2].toInt(),
-                        residuo = campo[3],
+                        tipo = campo[3],
                         distrito = campo[4].toInt(),
                         nombreDistrito = campo[5],
                         //Cuidado con las comas del double.
@@ -35,7 +34,7 @@ class ServiceCSV {
         val ficheroResiduo = File(directorio + File.separator + "output" + File.separator + "resultado_residuos.csv")
         ficheroResiduo.writeText("anio;mes;lote;residuo;distrito;nombreDistrito;toneladas")
         residuos.forEach {
-            ficheroResiduo.appendText("\n${it.anio};${it.mes};${it.lote};${it.residuo};${it.distrito};${it.nombreDistrito};${it.toneladas}")
+            ficheroResiduo.appendText("\n${it.anio};${it.mes};${it.lote};${it.tipo};${it.distrito};${it.nombreDistrito};${it.toneladas}")
         }
     }
 
@@ -47,7 +46,7 @@ class ServiceCSV {
                 .map{campo ->
                     ContenedorDTO(
                         codigo = campo[0].toInt(),
-                        contenedor = campo[1],
+                        tipo = campo[1],
                         modelo = campo[2],
                         descripcion = campo[3],
                         cantidad = campo[4].toInt(),
@@ -75,7 +74,7 @@ class ServiceCSV {
         //TODO: tiene que tener la misma cabecera o podemos cambiar los nombres de las columnas
         ficheroContenedor.writeText("codigo;contenedor;modelo;descripcion;cantidad;lote;distrito;barrio;via;nombre;numero;coordenadaX,coordenadaY;longitud;latitud;direccion")
         contenedores.forEach {
-            ficheroContenedor.appendText("\n${it.codigo};${it.contenedor};${it.modelo};${it.descripcion};${it.cantidad};${it.lote};${it.distrito};${it.barrio};${it.via};${it.nombre};${it.numero};${it.coordenadaX};${it.coordenadaY};${it.longitud};${it.latitud}${it.direccion}")
+            ficheroContenedor.appendText("\n${it.codigo};${it.tipo};${it.modelo};${it.descripcion};${it.cantidad};${it.lote};${it.distrito};${it.barrio};${it.via};${it.nombre};${it.numero};${it.coordenadaX};${it.coordenadaY};${it.longitud};${it.latitud}${it.direccion}")
         }
     }
 

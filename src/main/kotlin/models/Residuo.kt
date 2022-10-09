@@ -1,18 +1,21 @@
 package models
 
+import org.jetbrains.kotlinx.dataframe.annotations.DataSchema
+
+@DataSchema
 data class Residuo(
     //TODO: optimización tipo dato
     val anio: Int,
     val mes: String,
     val lote: Int,
-    val residuo: TipoResiduo,
+    val tipo: TipoResiduo,
     val distrito: Int,
     val nombreDistrito: String,
     val toneladas: Double
 
 ) {
     override fun toString(): String {
-        return "Residuo(anio=$anio, mes='$mes', lote=$lote, residuo=$residuo, distrito=$distrito, nombreDistrito='$nombreDistrito', toneladas=$toneladas)"
+        return "Residuo(anio=$anio, mes='$mes', lote=$lote, residuo=$tipo, distrito=$distrito, nombreDistrito='$nombreDistrito', toneladas=$toneladas)"
     }
 }
 

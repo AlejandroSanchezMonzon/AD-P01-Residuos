@@ -9,7 +9,7 @@ fun ResiduoDTO.toResiduo(): Residuo {
         anio = this.anio,
         mes = this.mes,
         lote = this.lote,
-        residuo = TipoResiduo.from(this.residuo),
+        tipo = TipoResiduo.from(this.tipo),
         distrito = this.distrito,
         nombreDistrito = this.nombreDistrito,
         toneladas = this.toneladas
@@ -21,7 +21,7 @@ fun Residuo.toDTO(): ResiduoDTO {
         anio = this.anio,
         mes = this.mes,
         lote = this.lote,
-        residuo = this.residuo.tipo,
+        tipo = this.tipo.tipo,
         distrito = this.distrito,
         nombreDistrito = this.nombreDistrito,
         toneladas = this.toneladas

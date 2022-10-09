@@ -1,8 +1,11 @@
 package models
 
+import org.jetbrains.kotlinx.dataframe.annotations.DataSchema
+import java.util.*
+@DataSchema
 data class Contenedor(
     val codigo: Int,
-    val contenedor: TipoContenedor,
+    val tipo: TipoContenedor,
     val modelo: String,
     val descripcion: String,
     val cantidad: Int,
@@ -20,13 +23,30 @@ data class Contenedor(
 
 ) {
     override fun toString(): String {
-        return "Contenedor(codigo=$codigo, contenedor=$contenedor," +
+        return "Contenedor(codigo=$codigo, tipo=$tipo," +
                 " modelo='$modelo', descripcion='$descripcion'," +
                 " cantidad=$cantidad, lote=$lote, distrito='$distrito'," +
                 " barrio='$barrio', via=$via, nombre='$nombre', numero=$numero," +
                 " coordenadaX=$coordenadaX, coordenadaY=$coordenadaY," +
                 " longitud='$longitud', latitud='$latitud', direccion='$direccion')"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Contenedor
+
+        if (distrito != other.distrito) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return distrito.hashCode()
+    }
+
+
 }
 
 enum class TipoContenedor(val tipo: String) {
@@ -87,8 +107,10 @@ enum class TipoVia(val tipo: String) {
                 "CAMINO" -> CAMINO
                 "PARTICULAR" -> PARTICULAR
                 "TRAVESIA" -> TRAVESIA
+                "TRAVESÍA" -> TRAVESIA
                 "PASAJE" -> PASAJE
                 "CALLEJON" -> CALLEJON
+                "CALLEJÓN" -> CALLEJON
                 "CUESTA" -> CUESTA
                 "COSTANILLA" -> COSTANILLA
                 "AUTOVIA" -> AUTOVIA
