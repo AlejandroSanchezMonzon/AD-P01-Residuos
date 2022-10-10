@@ -15,10 +15,10 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
 
-    //Serialization para JSON
+    // Serialization para JSON
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
 
-    //Serialization para XML
+    // Serialization para XML
     implementation("io.github.pdvrieze.xmlutil:core-jvm:0.84.3")
     implementation("io.github.pdvrieze.xmlutil:serialization-jvm:0.84.3")
 
@@ -28,8 +28,11 @@ dependencies {
     //DSL para HTML: https://ktor.io/docs/html-dsl.html , https://kotlinlang.org/docs/typesafe-html-dsl.html
     //implementation("io.ktor:ktor-server-html-builder:2.1.2")
     //implementation("io.ktor:ktor-server-netty:2.1.2")
-    //implementation(kotlin("stdlib-js"))
     //implementation("org.jetbrains.kotlinx:kotlinx-html-js:0.8.0")
+
+    // LetsPlots en Kotlin
+    implementation("org.jetbrains.lets-plot:lets-plot-kotlin:4.1.0")
+    implementation("org.jetbrains.lets-plot:lets-plot-image-export:2.5.0")
 }
 
 tasks.test {
