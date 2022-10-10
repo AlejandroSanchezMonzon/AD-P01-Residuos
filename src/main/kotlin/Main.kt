@@ -10,13 +10,14 @@ fun main(args: Array<String>) {
     val serviceJSON = ServiceJSON()
     val serviceXML = ServiceXML()
 
+    inicializar()
+
     serviceXML.writeXMLContendores(serviceCSV.readCSVContenedor())
     serviceXML.writeXMLResiduos(serviceCSV.readCSVResiduo())
 
     serviceJSON.writeJSONContenedor(serviceCSV.readCSVContenedor())
     serviceJSON.writeJSONResiduo(serviceCSV.readCSVResiduo())
 
-    inicializar()
-    println(estadisticasMensualesPorTipoEnDistrito("Centro"))
+    println(mediaContenedoresPorTipoPorDistrito())
 
 }
