@@ -1,23 +1,53 @@
-import controllers.*
-
-import services.ServiceCSV
-import services.ServiceJSON
-import services.ServiceXML
-
+import controllers.inicializar
+import utils.validateFileExtension
+import utils.validatePath
 
 fun main(args: Array<String>) {
-    val serviceCSV = ServiceCSV()
-    val serviceJSON = ServiceJSON()
-    val serviceXML = ServiceXML()
-
     inicializar()
 
-    serviceXML.writeXMLContendores(serviceCSV.readCSVContenedor())
-    serviceXML.writeXMLResiduos(serviceCSV.readCSVResiduo())
+}
 
-    serviceJSON.writeJSONContenedor(serviceCSV.readCSVContenedor())
-    serviceJSON.writeJSONResiduo(serviceCSV.readCSVResiduo())
+fun checkArgs(args: Array<String>) {
+    if (args.size < 2 || args.size > 4) {
+        //TODO: añadir logger indicando que los argumentos no son válidos.
+        println("Argumentos inválidos.")
+    }
 
-    println(mediaContenedoresPorTipoPorDistrito())
+    val numberArgs = args.size
 
+    if (args[0].uppercase() == "PARSER" && numberArgs == 3) {
+        val pathOrigen = args[1]
+        val pathDestino = args[2]
+
+        if (validateFileExtension(pathOrigen)) {
+            //TODO: añadir lo que hace la opción PARSER.
+        } else {
+            //TODO: Añadir logger indicando que el archivo no es válido.
+            println("El archivo no es válido.")
+        }
+    } else if (args[0].uppercase() == "RESUMEN" && numberArgs == 3) {
+        val pathOrigen = args[1]
+        val pathDestino = args[2]
+
+        if (validateFileExtension(pathOrigen) && validatePath(pathOrigen) && validatePath(pathDestino)) {
+            //TODO: añadir lo que hace la opción RESUMEN.
+        } else {
+            //TODO: Añadir logger indicando que el path o el archivo no es válido.
+            println("El path o el archivo no es válido.")
+        }
+
+        //TODO: controlar que args[1] es un distrito.
+    } else if (args[0].uppercase() == "RESUMEN" && numberArgs == 4) {
+        val pathOrigen = args[2]
+        val pathDestino = args[3]
+
+        if (validateFileExtension(pathOrigen) && validatePath(pathOrigen) && validatePath(pathDestino)) {
+            //TODO: añadir lo que hace la opción RESUMEN - DISTRITO.
+        } else {
+            //TODO: Añadir logger indicando que el path o el archivo no es válido.
+            println("El path o el archivo no es válido.")
+        }
+    } else {
+        //TODO: Añadir logger indicando que los argumentos no son válidos.
+    }
 }
