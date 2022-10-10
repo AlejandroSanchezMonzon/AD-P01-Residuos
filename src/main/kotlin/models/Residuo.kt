@@ -1,5 +1,6 @@
 package models
 
+import dto.IAlmacenable
 import org.jetbrains.kotlinx.dataframe.annotations.DataSchema
 
 @DataSchema

@@ -1,7 +1,8 @@
 package models
 
+import dto.IAlmacenable
 import org.jetbrains.kotlinx.dataframe.annotations.DataSchema
-import java.util.*
+
 @DataSchema
 data class Contenedor(
     val codigo: Int,
@@ -21,7 +22,7 @@ data class Contenedor(
     val latitud: String,
     val direccion: String
 
-) {
+){
     override fun toString(): String {
         return "Contenedor(codigo=$codigo, tipo=$tipo," +
                 " modelo='$modelo', descripcion='$descripcion'," +

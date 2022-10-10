@@ -1,6 +1,6 @@
 package services
 
-import models.Residuo
+import dto.IAlmacenable
 
-interface IStorageXML: IStorage<Residuo> {
+interface IStorageXML: IStorage<IAlmacenable> {
 }
