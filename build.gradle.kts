@@ -33,6 +33,10 @@ dependencies {
     // LetsPlots en Kotlin
     implementation("org.jetbrains.lets-plot:lets-plot-kotlin:4.1.0")
     implementation("org.jetbrains.lets-plot:lets-plot-image-export:2.5.0")
+
+    // Loggers para Kotlin
+    implementation("io.github.microutils:kotlin-logging-jvm:3.0.0")
+    implementation("ch.qos.logback:logback-classic:1.4.3")
 }
 
 tasks.test {
