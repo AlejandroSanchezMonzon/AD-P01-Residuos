@@ -54,6 +54,5 @@ data class ContenedorDTO (
     
     @XmlElement(true)
     val direccion: String
-){
 
-}
+)

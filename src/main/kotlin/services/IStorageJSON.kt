@@ -1,6 +1,6 @@
 package services
 
-import models.Residuo
+import dto.IAlmacenable
 
-interface IStorageJSON: IStorage<Residuo> {
+interface IStorageJSON: IStorage<IAlmacenable> {
 }

@@ -1,7 +1,11 @@
 package services
 
-import models.Residuo
+import dto.ContenedorDTO
+import dto.IAlmacenable
+import dto.ResiduoDTO
 
-interface IStorageCSV: IStorage<Residuo> {
-    fun read(): List<Residuo>;
+interface IStorageCSV: IStorage<IAlmacenable> {
+    fun readResiduo(): List<ResiduoDTO>
+    fun readContenedor(): List<ContenedorDTO>
+
 }
