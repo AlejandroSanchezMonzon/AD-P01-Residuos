@@ -40,8 +40,8 @@ enum class TipoResiduo(val tipo: String) {
     CAMA_CABALLO("CAMA DE CABALLO");
 
     companion object {
-        fun from(residuo: String): TipoResiduo {
-            return when (residuo.uppercase()) {
+        fun from(tipo: String): TipoResiduo {
+            return when (tipo.uppercase()) {
                 "RESTO" -> RESTO
                 "ENVASES" -> ENVASES
                 "VIDRIO" -> VIDRIO

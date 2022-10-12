@@ -26,6 +26,7 @@ fun ContenedorDTO.toContenedor(): Contenedor {
     )
 }
 
+//TODO: En la documentación explicar por qué no nos hace falta este método
 fun Contenedor.toDTO(): ContenedorDTO {
     return ContenedorDTO(
         codigo = this.codigo,

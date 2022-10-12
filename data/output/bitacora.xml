@@ -1,0 +1,28 @@
+<Bitacora>
+    <id>e3d9e620-a3d0-41d9-90bd-8abe85ec9362</id>
+    <instante>2022-10-12T19:14:22.221624</instante>
+    <tipo>PARSER</tipo>
+    <exito>true</exito>
+    <tiempoEjecucion>7237</tiempoEjecucion>
+</Bitacora>
+<Bitacora>
+    <id>89ba9336-d144-4e7b-b894-ed7e56d47fb8</id>
+    <instante>2022-10-12T19:14:36.537254</instante>
+    <tipo>PARSER</tipo>
+    <exito>true</exito>
+    <tiempoEjecucion>6628</tiempoEjecucion>
+</Bitacora>
+<Bitacora>
+    <id>187b232b-c4a5-41f6-b47c-f54c8c6f6c3c</id>
+    <instante>2022-10-12T19:14:52.796906</instante>
+    <tipo>PARSER</tipo>
+    <exito>true</exito>
+    <tiempoEjecucion>7693</tiempoEjecucion>
+</Bitacora>
+<Bitacora>
+    <id>c67fa559-6bc6-40d7-9ffb-a0a91d6b4349</id>
+    <instante>2022-10-12T19:15:05.963277</instante>
+    <tipo>PARSER</tipo>
+    <exito>true</exito>
+    <tiempoEjecucion>7671</tiempoEjecucion>
+</Bitacora>
