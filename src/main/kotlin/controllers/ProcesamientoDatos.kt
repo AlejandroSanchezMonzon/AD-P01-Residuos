@@ -18,6 +18,7 @@ import org.jetbrains.letsPlot.intern.Plot
 import org.jetbrains.letsPlot.label.labs
 import org.jetbrains.letsPlot.letsPlot
 import services.*
+import utils.dateFormatter
 import java.io.File
 import java.nio.file.Paths
 import java.time.LocalDateTime
@@ -98,7 +99,7 @@ class ProcesamientoDatos {
                         <hr>
 
                             <h1>Resumen de recogidas de basura y reciclaje de </h1>
-                            <p>Fecha de generación: ${LocalDateTime.now()}</p>
+                            <p>Fecha de generación: ${dateFormatter(LocalDateTime.now())}</p>
                             <p>Autores: Alejandro Sánchez Monzón - Mireya Sánchez Pinzón</p>
 
                         <hr>
@@ -197,7 +198,7 @@ class ProcesamientoDatos {
                         <hr>
 
                             <h1>Resumen de recogidas de basura y reciclaje de $distrito</h1>
-                            <p>Fecha de generación: ${LocalDateTime.now()}</p>
+                            <p>Fecha de generación: ${dateFormatter(LocalDateTime.now())}</p>
                             <p>Autores: Alejandro Sánchez Monzón - Mireya Sánchez Pinzón</p>
 
                         <hr>
