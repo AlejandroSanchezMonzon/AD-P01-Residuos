@@ -5,10 +5,7 @@ import utils.validatePath
 fun main(args: Array<String>){
     //TODO: Implementar path que no existan.
     val procesamientoDatos = ProcesamientoDatos();
-    procesamientoDatos
-        .opcionParser(
-            "/Users/mireyasanchez/Documents/AccesoADatos/Proyectos/AD-P01-Residuos/data",
-            "/Users/mireyasanchez/Documents/AccesoADatos/Proyectos/AD-P01-Residuos/data/output")
+    procesamientoDatos.opcionResumen("C:\\GradoSuperior\\2DAM\\Acceso-Datos\\Practicas\\AD-P01-Residuos\\src\\main\\resources", "C:\\GradoSuperior\\2DAM\\Acceso-Datos\\Practicas\\AD-P01-Residuos\\data\\output")
 }
 
 fun checkArgs(args: Array<String>) {

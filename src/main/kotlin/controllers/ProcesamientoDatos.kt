@@ -17,13 +17,11 @@ import org.jetbrains.letsPlot.geom.geomPoint
 import org.jetbrains.letsPlot.intern.Plot
 import org.jetbrains.letsPlot.label.labs
 import org.jetbrains.letsPlot.letsPlot
-import services.StorageCSV
-import services.StorageJSON
-import services.StorageXML
-import java.io.IOException
+import services.*
+import java.io.File
+import java.nio.file.Paths
 import java.time.LocalDateTime
 import java.util.*
-import kotlin.system.exitProcess
 import kotlin.system.measureTimeMillis
 
 
@@ -31,8 +29,8 @@ class ProcesamientoDatos {
     private val storageCSV = StorageCSV()
     private val storageJSON = StorageJSON()
     private val storageXML = StorageXML()
-
-
+    private val serviceHTML = ServiceHTML()
+    private val serviceCSS = ServiceCSS()
 
     fun opcionParser(pathOrigen: String, pathDestino: String) {
         var success = true
@@ -70,6 +68,8 @@ class ProcesamientoDatos {
 
         var success = true
         var ejecutionTime = 0L
+        val html: String
+        val letsPlot = Paths.get(System.getProperty("user.dir") + File.separator + "lets-plot-images")
 
         try {
             ejecutionTime = measureTimeMillis {
@@ -82,8 +82,73 @@ class ProcesamientoDatos {
                 estadisticasToneladasAnualesPorTipoPorDistrito(listaResiduos)
                 cantidadResiduosAnualPorDistrito(listaResiduos)
                 cantidadResiduoPorTipoPorDistrito(listaResiduos)
-                //TODO: Resumen html Madrid.
             }
+
+            html = """
+                <DOCTYPE html>
+                    <html lang="es-ES">
+                        <head>
+                            <meta charset="utf-8">
+                            <title>Resumen de recogidas de basura y reciclaje de Madrid.</title>
+
+                            <link rel="stylesheet" type="text/css" href="./style.css">
+                        </head>
+
+                        <body>
+                        <hr>
+
+                            <h1>Resumen de recogidas de basura y reciclaje de </h1>
+                            <p>Fecha de generación: ${LocalDateTime.now()}</p>
+                            <p>Autores: Alejandro Sánchez Monzón - Mireya Sánchez Pinzón</p>
+
+                        <hr>
+
+                            <div>
+                                <ul>
+                                    <li>Número de contenedores de cada tipo que hay en cada distrito: 
+                                        <p>${numeroContenedoresPorTipoPorDistrito(listaContenedores)}</p>
+                                    </li>
+                                    
+                                    <li>Media de contenedores de cada tipo que hay en cada distrito: 
+                                        <p>${mediaContenedoresPorTipoPorDistrito(listaContenedores)}</p>
+                                    </li>
+                                    
+                                    <li>
+                                        <img title="Gráfico con el total de contenedores por distrito" src="./lets-plot-images/contenedores_distritos.png"></img>
+                                    </li>
+                                    
+                                    <li>Media de toneladas anuales de recogidas por cada tipo de basura agrupadas por distrito: 
+                                        <p>${mediaToneladasAnualesPorTipoResiuoPorDistrito(listaResiduos)}</p>
+                                    </li>
+                                    <li>
+                                        <img title=" Gráfico de media de toneladas mensuales de recogida de basura por distrito" src="./lets-plot-images/media_toneladas_distrito.png"></img>
+                                    </li>
+                                    
+                                    <li>Máximo, mínimo , media y desviación de toneladas anuales de recogidas por cada tipo de basura agrupadas por distrito: 
+                                        <p>${estadisticasToneladasAnualesPorTipoPorDistrito(listaResiduos)}</p>
+                                    </li>
+                                    
+                                    <li>Suma de todo lo recogido en un año por distrito: 
+                                        <p>${cantidadResiduosAnualPorDistrito(listaResiduos)}</p>
+                                    </li>
+                                    
+                                    <li>Por cada distrito obtener para cada tipo de residuo la cantidad recogida: 
+                                        <p>${cantidadResiduoPorTipoPorDistrito(listaResiduos)}</p>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <p>Tiempo de generación en milisegundos: $ejecutionTime</p>
+                            </div>
+
+                            <hr>
+                        </body>
+                    </html>
+                </DOCTYPE>
+            """.trimIndent()
+
+            serviceCSS.writeCSS(pathDestino)
+            serviceHTML.writeHTML(pathDestino, html)
         }catch(e: Exception) {
             success = false
         }
@@ -105,6 +170,8 @@ class ProcesamientoDatos {
 
         var success = true
         var ejecutionTime = 0L
+        val html: String
+        val letsPlot = Paths.get(System.getProperty("user.dir") + File.separator + "lets-plot-images")
 
         try {
             ejecutionTime = measureTimeMillis {
@@ -114,8 +181,62 @@ class ProcesamientoDatos {
                 graficoTotalToneladasResiduoDistrito(listaResiduos, distrito)
                 estadisticasMensualesPorTipoEnDistrito(listaResiduos, distrito)
                 graficoMaxMinMediaPorMeses(listaResiduos, distrito)
-                //TODO: Resumen html distrito.
             }
+
+            html = """
+                <DOCTYPE html>
+                    <html lang="es-ES">
+                        <head>
+                            <meta charset="utf-8">
+                            <title> Resumen de recogidas de basura y reciclaje de $distrito</title>
+
+                            <link rel="stylesheet" type="text/css" href="./style.css">
+                        </head>
+
+                        <body>
+                        <hr>
+
+                            <h1>Resumen de recogidas de basura y reciclaje de $distrito</h1>
+                            <p>Fecha de generación: ${LocalDateTime.now()}</p>
+                            <p>Autores: Alejandro Sánchez Monzón - Mireya Sánchez Pinzón</p>
+
+                        <hr>
+
+                            <div>
+                                <ul>
+                                    <li>Número de contenedores de cada tipo que hay en este distrito: 
+                                        <p>${numeroContenedoresPorTipoEnDistrito(listaContenedores, distrito)}</p>
+                                    </li>
+                                    
+                                    <li>Total de toneladas recogidas en ese distrito por residuo: 
+                                        <p>${cantidadToneladasPorResiduoEnDistrito(listaResiduos, distrito)}</p>
+                                    </li>
+                                    
+                                    <li>
+                                        <img title="Gráfico con el total de toneladas por residuo en ese distrito:" src="./lets-plot-images/contenedores_distritos.png"></img>
+                                    </li>
+                                    
+                                    <li>Máximo, mínimo , media y desviación por mes por residuo en dicho distrito: 
+                                        <p>${estadisticasMensualesPorTipoEnDistrito(listaResiduos, distrito)}</p>
+                                    </li>
+                                    <li>
+                                        <img title="Gráfica del máximo, mínimo y media por meses en dicho distrito." src="./lets-plot-images/media_toneladas_distrito.png"></img>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <p>Tiempo de generación en milisegundos: $ejecutionTime</p>
+                            </div>
+
+                            <hr>
+                        </body>
+                    </html>
+                </DOCTYPE>
+            """.trimIndent()
+
+            serviceCSS.writeCSS(pathDestino)
+            serviceHTML.writeHTMLDistrito(pathDestino, html, distrito)
+
         }catch(e: Exception) {
             success = false
         }
@@ -131,24 +252,22 @@ class ProcesamientoDatos {
     }
 
     // Número de contenedores de cada tipo que hay en cada distrito.
-    private fun numeroContenedoresPorTipoPorDistrito(listaContenedores: DataFrame<Contenedor>) {
-        listaContenedores
+    private fun numeroContenedoresPorTipoPorDistrito(listaContenedores: DataFrame<Contenedor>): DataFrame<Contenedor> {
+        return listaContenedores
             .groupBy("distrito", "tipo")
             .count()
             .sortBy("distrito")
-            .print()
     }
 
     //Media de contenedores de cada tipo que hay en cada distrito.
 //TODO: Preguntar a Jose Luís cómo es esto a nivel matemático.
-    private fun mediaContenedoresPorTipoPorDistrito(listaContenedores: DataFrame<Contenedor>) {
-        listaContenedores
+    private fun mediaContenedoresPorTipoPorDistrito(listaContenedores: DataFrame<Contenedor>): DataFrame<Contenedor> {
+        return listaContenedores
             .groupBy("distrito", "tipo")
             .aggregate {
                 count()
             }
             .sortBy("distrito")
-            .print()
     }
 
     //Gráfico con el total de contenedores por distrito.
@@ -178,14 +297,13 @@ class ProcesamientoDatos {
     }
 
     //Media de toneladas anuales de recogidas por cada tipo de basura agrupadas por distrito.
-    private fun mediaToneladasAnualesPorTipoResiuoPorDistrito(listaResiduos: DataFrame<Residuo>) {
-        listaResiduos
+    private fun mediaToneladasAnualesPorTipoResiuoPorDistrito(listaResiduos: DataFrame<Residuo>): DataFrame<Residuo> {
+        return listaResiduos
             .groupBy("nombreDistrito", "tipo", "anio")
             .aggregate {
                 mean("toneladas") into "Media"
             }
             .sortBy("nombreDistrito")
-            .print()
     }
 
     //Gráfico de media de toneladas mensuales de recogida de basura por distrito.
@@ -215,8 +333,8 @@ class ProcesamientoDatos {
     }
 
     //Máximo, mínimo , media y desviación de toneladas anuales de recogidas por cada tipo de basura agrupadas por distrito.
-    private fun estadisticasToneladasAnualesPorTipoPorDistrito(listaResiduos: DataFrame<Residuo>) {
-        listaResiduos
+    private fun estadisticasToneladasAnualesPorTipoPorDistrito(listaResiduos: DataFrame<Residuo>): DataFrame<Residuo> {
+        return listaResiduos
             .groupBy("nombreDistrito", "tipo", "anio")
             .aggregate {
                 mean("toneladas") into "Media"
@@ -225,54 +343,49 @@ class ProcesamientoDatos {
                 std("toneladas") into "Desviación"
             }
             .sortBy("nombreDistrito")
-            .print()
     }
 
     //Suma de todo lo recogido en un año por distrito.
-    private fun cantidadResiduosAnualPorDistrito(listaResiduos: DataFrame<Residuo>) {
-        listaResiduos
+    private fun cantidadResiduosAnualPorDistrito(listaResiduos: DataFrame<Residuo>): DataFrame<Residuo> {
+        return listaResiduos
             .filter { it["anio"] == 2021 }
             .groupBy("nombreDistrito")
             .aggregate {
                 sum("toneladas") into "TotalAnual"
             }
             .sortBy("nombreDistrito")
-            .print()
     }
 
     //Por cada distrito obtener para cada tipo de residuo la cantidad recogida.
-    private fun cantidadResiduoPorTipoPorDistrito(listaResiduos: DataFrame<Residuo>) {
-        listaResiduos
+    private fun cantidadResiduoPorTipoPorDistrito(listaResiduos: DataFrame<Residuo>): DataFrame<Residuo> {
+        return listaResiduos
             .groupBy("nombreDistrito", "tipo")
             .aggregate {
                 sum("toneladas") into "TotalResiduo"
             }
             .sortBy("nombreDistrito")
-            .print()
     }
 
 
     //EN DISTRITO CONCRETO
 //Número de contenedores de cada tipo que hay en este distrito.
-    private fun numeroContenedoresPorTipoEnDistrito(listaContenedores: DataFrame<Contenedor>, distrito: String) {
-        listaContenedores
+    private fun numeroContenedoresPorTipoEnDistrito(listaContenedores: DataFrame<Contenedor>, distrito: String): DataFrame<Contenedor> {
+        return listaContenedores
             .filter { it["distrito"] == distrito }
             .groupBy("tipo")
             .aggregate {
                 count() into "NúmeroContenedores"
             }
-            .print()
     }
 
     //Total de toneladas recogidas en ese distrito por residuo.
-    private fun cantidadToneladasPorResiduoEnDistrito(listaResiduos: DataFrame<Residuo>, distrito: String) {
-        listaResiduos
+    private fun cantidadToneladasPorResiduoEnDistrito(listaResiduos: DataFrame<Residuo>, distrito: String): DataFrame<Residuo> {
+        return listaResiduos
             .filter { it["nombreDistrito"] == distrito }
             .groupBy("tipo")
             .aggregate {
                 sum("toneladas") into "Toneladas"
             }
-            .print()
     }
 
     //Gráfico con el total de toneladas por residuo en ese distrito.
@@ -304,8 +417,8 @@ class ProcesamientoDatos {
 
     //Máximo, mínimo , media y desviación por mes por residuo en dicho distrito.
 //TODO: Mirar desviación
-    private fun estadisticasMensualesPorTipoEnDistrito(listaResiduos: DataFrame<Residuo>, distrito: String) {
-        listaResiduos
+    private fun estadisticasMensualesPorTipoEnDistrito(listaResiduos: DataFrame<Residuo>, distrito: String): DataFrame<Residuo> {
+        return listaResiduos
             .filter { it["nombreDistrito"] == distrito }
             .groupBy("nombreDistrito", "tipo", "mes")
             .aggregate {
@@ -314,7 +427,6 @@ class ProcesamientoDatos {
                 max("toneladas") into "Máximo"
                 std("toneladas") into "Desviación"
             }
-            .print()
     }
 
     //Gráfica del máximo, mínimo y media por meses en dicho distrito.
@@ -361,4 +473,3 @@ class ProcesamientoDatos {
         ggsave(fig, "media_min_max_mensual_$distrito.png")
     }
 }
-
