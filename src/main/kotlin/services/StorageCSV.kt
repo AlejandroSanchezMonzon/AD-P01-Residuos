@@ -9,7 +9,7 @@ import java.io.File
 
 class StorageCSV{
     fun readResiduo(directorio: String): List<ResiduoDTO>{
-        val ficheroResiduo = File(directorio)
+        val ficheroResiduo = File(directorio + File.separator + "modelo_residuos_2021.csv")
         if(ficheroResiduo.exists()){
             return ficheroResiduo.readLines().drop(1)
                 .map{it.split(";")}
@@ -23,7 +23,6 @@ class StorageCSV{
                         nombreDistrito = campo[5],
                         //Cuidado con las comas del double.
                         toneladas = parseDouble(campo[6]),
-
                     )
                 }
         }else{
@@ -40,7 +39,7 @@ class StorageCSV{
     }
 
     fun readContenedor(directorio: String): List<ContenedorDTO>{
-        val ficheroContenedor = File(directorio)
+        val ficheroContenedor = File(directorio + File.separator + "contenedores_varios.csv")
         if(ficheroContenedor.exists()){
             return ficheroContenedor.readLines().drop(1)
                 .map{it.split(";")}

@@ -2,9 +2,12 @@ package controllers
 
 import jetbrains.datalore.base.values.Color
 import mappers.toContenedor
+import mappers.toDTO
 import mappers.toResiduo
+import models.Bitacora
 import models.Contenedor
 import models.Residuo
+import models.TipoOpcion
 import org.jetbrains.kotlinx.dataframe.DataFrame
 import org.jetbrains.kotlinx.dataframe.api.*
 import org.jetbrains.letsPlot.Stat.identity
@@ -17,27 +20,42 @@ import org.jetbrains.letsPlot.letsPlot
 import services.StorageCSV
 import services.StorageJSON
 import services.StorageXML
+import java.io.IOException
+import java.time.LocalDateTime
+import java.util.*
+import kotlin.system.exitProcess
 import kotlin.system.measureTimeMillis
 
 
 class ProcesamientoDatos {
-    val storageCSV = StorageCSV()
-    val storageJSON = StorageJSON()
-    val storageXML = StorageXML()
+    private val storageCSV = StorageCSV()
+    private val storageJSON = StorageJSON()
+    private val storageXML = StorageXML()
+
+
 
     fun opcionParser(pathOrigen: String, pathDestino: String) {
-        if(pathOrigen.lowercase().contains("modelo")) {
-            val listaResiduosDTO = storageCSV.readResiduo(pathOrigen)
-            storageCSV.writeResiduo(pathDestino, listaResiduosDTO)
-            storageJSON.writeResiduo(pathDestino, listaResiduosDTO)
-            storageXML.writeResiduo(pathDestino, listaResiduosDTO)
-        } else if(pathOrigen.lowercase().contains("varios")) {
-            val listaContenedoresDTO = storageCSV.readContenedor(pathOrigen)
-            storageCSV.writeContenedor(pathDestino, listaContenedoresDTO)
-            storageJSON.writeContenedor(pathDestino, listaContenedoresDTO)
-            storageXML.writeContenedor(pathDestino, listaContenedoresDTO)
+        var success = true
+        var ejecutionTime = 0L
+
+        try {
+            ejecutionTime = measureTimeMillis {
+                val listaResiduosDTO = storageCSV.readResiduo(pathOrigen)
+                storageCSV.writeResiduo(pathDestino, listaResiduosDTO)
+                storageJSON.writeResiduo(pathDestino, listaResiduosDTO)
+                storageXML.writeResiduo(pathDestino, listaResiduosDTO)
+
+                val listaContenedoresDTO = storageCSV.readContenedor(pathOrigen)
+                storageCSV.writeContenedor(pathDestino, listaContenedoresDTO)
+                storageJSON.writeContenedor(pathDestino, listaContenedoresDTO)
+                storageXML.writeContenedor(pathDestino, listaContenedoresDTO)
+            }
+        } catch(e: Exception) {
+            success = false
         }
 
+        val bitacora = Bitacora(UUID.randomUUID(), LocalDateTime.now(), TipoOpcion.PARSER, success, ejecutionTime)
+        storageXML.writeBitacora(pathDestino, bitacora.toDTO())
     }
 
     fun opcionResumen(pathOrigen: String, pathDestino: String) {
@@ -50,18 +68,29 @@ class ProcesamientoDatos {
             .map { it.toContenedor() }
             .toDataFrame()
 
-        var ejecutionTime = measureTimeMillis {
-            inicializar(listaResiduos, listaContenedores)
-            numeroContenedoresPorTipoPorDistrito(listaContenedores)
-            mediaContenedoresPorTipoPorDistrito(listaContenedores)
-            graficoTotalContenedoresDistrito(listaContenedores)
-            mediaToneladasAnualesPorTipoResiuoPorDistrito(listaResiduos)
-            graficoMediaToneladasDistrito(listaResiduos)
-            estadisticasToneladasAnualesPorTipoPorDistrito(listaResiduos)
-            cantidadResiduosAnualPorDistrito(listaResiduos)
-            cantidadResiduoPorTipoPorDistrito(listaResiduos)
+        var success = true
+        var ejecutionTime = 0L
+
+        try {
+            ejecutionTime = measureTimeMillis {
+                inicializar(listaResiduos, listaContenedores)
+                numeroContenedoresPorTipoPorDistrito(listaContenedores)
+                mediaContenedoresPorTipoPorDistrito(listaContenedores)
+                graficoTotalContenedoresDistrito(listaContenedores)
+                mediaToneladasAnualesPorTipoResiuoPorDistrito(listaResiduos)
+                graficoMediaToneladasDistrito(listaResiduos)
+                estadisticasToneladasAnualesPorTipoPorDistrito(listaResiduos)
+                cantidadResiduosAnualPorDistrito(listaResiduos)
+                cantidadResiduoPorTipoPorDistrito(listaResiduos)
+                //TODO: Resumen html Madrid.
+            }
+        }catch(e: Exception) {
+            success = false
         }
-        //TODO: Resumen html Madrid.
+
+        val bitacora = Bitacora(UUID.randomUUID(), LocalDateTime.now(), TipoOpcion.RESUMEN_GLOBAL, success, ejecutionTime)
+        storageXML.writeBitacora(pathDestino, bitacora.toDTO())
+
     }
 
     fun opcionResumenDistrito(distrito: String, pathOrigen: String, pathDestino: String) {
@@ -74,24 +103,35 @@ class ProcesamientoDatos {
             .map { it.toContenedor() }
             .toDataFrame()
 
-        var ejecutionTime = measureTimeMillis {
-            inicializar(listaResiduos, listaContenedores)
-            numeroContenedoresPorTipoEnDistrito(listaContenedores, distrito)
-            cantidadToneladasPorResiduoEnDistrito(listaResiduos, distrito)
-            graficoTotalToneladasResiduoDistrito(listaResiduos, distrito)
-            estadisticasMensualesPorTipoEnDistrito(listaResiduos, distrito)
-            graficoMaxMinMediaPorMeses(listaResiduos, distrito)
+        var success = true
+        var ejecutionTime = 0L
+
+        try {
+            ejecutionTime = measureTimeMillis {
+                inicializar(listaResiduos, listaContenedores)
+                numeroContenedoresPorTipoEnDistrito(listaContenedores, distrito)
+                cantidadToneladasPorResiduoEnDistrito(listaResiduos, distrito)
+                graficoTotalToneladasResiduoDistrito(listaResiduos, distrito)
+                estadisticasMensualesPorTipoEnDistrito(listaResiduos, distrito)
+                graficoMaxMinMediaPorMeses(listaResiduos, distrito)
+                //TODO: Resumen html distrito.
+            }
+        }catch(e: Exception) {
+            success = false
         }
-        //TODO: Resumen html distrito.
+
+        val bitacora = Bitacora(UUID.randomUUID(), LocalDateTime.now(), TipoOpcion.RESUMEN_CIUDAD, success, ejecutionTime)
+        storageXML.writeBitacora(pathDestino, bitacora.toDTO())
+
     }
 
-    fun inicializar(listaResiduos: DataFrame<Residuo>, listaContenedores: DataFrame<Contenedor>) {
+    private fun inicializar(listaResiduos: DataFrame<Residuo>, listaContenedores: DataFrame<Contenedor>) {
         listaResiduos.cast<Residuo>()
         listaContenedores.cast<Contenedor>()
     }
 
     // Número de contenedores de cada tipo que hay en cada distrito.
-    fun numeroContenedoresPorTipoPorDistrito(listaContenedores: DataFrame<Contenedor>) {
+    private fun numeroContenedoresPorTipoPorDistrito(listaContenedores: DataFrame<Contenedor>) {
         listaContenedores
             .groupBy("distrito", "tipo")
             .count()
@@ -101,7 +141,7 @@ class ProcesamientoDatos {
 
     //Media de contenedores de cada tipo que hay en cada distrito.
 //TODO: Preguntar a Jose Luís cómo es esto a nivel matemático.
-    fun mediaContenedoresPorTipoPorDistrito(listaContenedores: DataFrame<Contenedor>) {
+    private fun mediaContenedoresPorTipoPorDistrito(listaContenedores: DataFrame<Contenedor>) {
         listaContenedores
             .groupBy("distrito", "tipo")
             .aggregate {
@@ -112,7 +152,7 @@ class ProcesamientoDatos {
     }
 
     //Gráfico con el total de contenedores por distrito.
-    fun graficoTotalContenedoresDistrito(listaContenedores: DataFrame<Contenedor>) {
+    private fun graficoTotalContenedoresDistrito(listaContenedores: DataFrame<Contenedor>) {
         val res = listaContenedores
             .groupBy("distrito", "tipo")
             .aggregate {
@@ -138,7 +178,7 @@ class ProcesamientoDatos {
     }
 
     //Media de toneladas anuales de recogidas por cada tipo de basura agrupadas por distrito.
-    fun mediaToneladasAnualesPorTipoResiuoPorDistrito(listaResiduos: DataFrame<Residuo>) {
+    private fun mediaToneladasAnualesPorTipoResiuoPorDistrito(listaResiduos: DataFrame<Residuo>) {
         listaResiduos
             .groupBy("nombreDistrito", "tipo", "anio")
             .aggregate {
@@ -149,7 +189,7 @@ class ProcesamientoDatos {
     }
 
     //Gráfico de media de toneladas mensuales de recogida de basura por distrito.
-    fun graficoMediaToneladasDistrito(listaResiduos: DataFrame<Residuo>) {
+    private fun graficoMediaToneladasDistrito(listaResiduos: DataFrame<Residuo>) {
         val res = listaResiduos
             .groupBy("nombreDistrito", "mes")
             .aggregate {
@@ -175,7 +215,7 @@ class ProcesamientoDatos {
     }
 
     //Máximo, mínimo , media y desviación de toneladas anuales de recogidas por cada tipo de basura agrupadas por distrito.
-    fun estadisticasToneladasAnualesPorTipoPorDistrito(listaResiduos: DataFrame<Residuo>) {
+    private fun estadisticasToneladasAnualesPorTipoPorDistrito(listaResiduos: DataFrame<Residuo>) {
         listaResiduos
             .groupBy("nombreDistrito", "tipo", "anio")
             .aggregate {
@@ -189,7 +229,7 @@ class ProcesamientoDatos {
     }
 
     //Suma de todo lo recogido en un año por distrito.
-    fun cantidadResiduosAnualPorDistrito(listaResiduos: DataFrame<Residuo>) {
+    private fun cantidadResiduosAnualPorDistrito(listaResiduos: DataFrame<Residuo>) {
         listaResiduos
             .filter { it["anio"] == 2021 }
             .groupBy("nombreDistrito")
@@ -201,7 +241,7 @@ class ProcesamientoDatos {
     }
 
     //Por cada distrito obtener para cada tipo de residuo la cantidad recogida.
-    fun cantidadResiduoPorTipoPorDistrito(listaResiduos: DataFrame<Residuo>) {
+    private fun cantidadResiduoPorTipoPorDistrito(listaResiduos: DataFrame<Residuo>) {
         listaResiduos
             .groupBy("nombreDistrito", "tipo")
             .aggregate {
@@ -214,7 +254,7 @@ class ProcesamientoDatos {
 
     //EN DISTRITO CONCRETO
 //Número de contenedores de cada tipo que hay en este distrito.
-    fun numeroContenedoresPorTipoEnDistrito(listaContenedores: DataFrame<Contenedor>, distrito: String) {
+    private fun numeroContenedoresPorTipoEnDistrito(listaContenedores: DataFrame<Contenedor>, distrito: String) {
         listaContenedores
             .filter { it["distrito"] == distrito }
             .groupBy("tipo")
@@ -225,7 +265,7 @@ class ProcesamientoDatos {
     }
 
     //Total de toneladas recogidas en ese distrito por residuo.
-    fun cantidadToneladasPorResiduoEnDistrito(listaResiduos: DataFrame<Residuo>, distrito: String) {
+    private fun cantidadToneladasPorResiduoEnDistrito(listaResiduos: DataFrame<Residuo>, distrito: String) {
         listaResiduos
             .filter { it["nombreDistrito"] == distrito }
             .groupBy("tipo")
@@ -236,7 +276,7 @@ class ProcesamientoDatos {
     }
 
     //Gráfico con el total de toneladas por residuo en ese distrito.
-    fun graficoTotalToneladasResiduoDistrito(listaResiduos: DataFrame<Residuo>, distrito: String) {
+    private fun graficoTotalToneladasResiduoDistrito(listaResiduos: DataFrame<Residuo>, distrito: String) {
         val res = listaResiduos
             .filter { it["nombreDistrito"] == distrito }
             .groupBy("tipo", "toneladas")
@@ -264,7 +304,7 @@ class ProcesamientoDatos {
 
     //Máximo, mínimo , media y desviación por mes por residuo en dicho distrito.
 //TODO: Mirar desviación
-    fun estadisticasMensualesPorTipoEnDistrito(listaResiduos: DataFrame<Residuo>, distrito: String) {
+    private fun estadisticasMensualesPorTipoEnDistrito(listaResiduos: DataFrame<Residuo>, distrito: String) {
         listaResiduos
             .filter { it["nombreDistrito"] == distrito }
             .groupBy("nombreDistrito", "tipo", "mes")
@@ -278,7 +318,7 @@ class ProcesamientoDatos {
     }
 
     //Gráfica del máximo, mínimo y media por meses en dicho distrito.
-    fun graficoMaxMinMediaPorMeses(listaResiduos: DataFrame<Residuo>, distrito: String) {
+    private fun graficoMaxMinMediaPorMeses(listaResiduos: DataFrame<Residuo>, distrito: String) {
         val res = listaResiduos.filter { it["nombreDistrito"] == distrito }
             .groupBy("nombreDistrito", "mes")
             .aggregate {

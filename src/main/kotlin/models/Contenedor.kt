@@ -31,23 +31,6 @@ data class Contenedor(
                 " coordenadaX=$coordenadaX, coordenadaY=$coordenadaY," +
                 " longitud='$longitud', latitud='$latitud', direccion='$direccion')"
     }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Contenedor
-
-        if (distrito != other.distrito) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        return distrito.hashCode()
-    }
-
-
 }
 
 enum class TipoContenedor(val tipo: String) {
@@ -58,14 +41,14 @@ enum class TipoContenedor(val tipo: String) {
     PAPEL_CARTON("PAPEL-CARTON");
 
     companion object {
-        fun from(contenedor: String): TipoContenedor {
-            return when (contenedor.uppercase()) {
+        fun from(tipo: String): TipoContenedor {
+            return when (tipo.uppercase()) {
                 "ORGANICA" -> ORGANICA
                 "RESTO" -> RESTO
                 "ENVASES" -> ENVASES
                 "VIDRIO" -> VIDRIO
                 "PAPEL-CARTON" -> PAPEL_CARTON
-                else -> throw IllegalArgumentException("Tipo de contenedor no reconocido")
+                else -> throw IllegalArgumentException("Tipo de contenedor no reconocido.")
             }
         }
     }
