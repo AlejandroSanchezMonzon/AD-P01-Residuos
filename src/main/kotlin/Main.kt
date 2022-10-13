@@ -3,12 +3,12 @@ import utils.validateFileExtension
 import utils.validatePath
 
 fun main(args: Array<String>){
-    //TODO: Implementar path que no existan.
-    val procesamientoDatos = ProcesamientoDatos();
-    procesamientoDatos.opcionResumen("C:\\GradoSuperior\\2DAM\\Acceso-Datos\\Practicas\\AD-P01-Residuos\\src\\main\\resources", "C:\\GradoSuperior\\2DAM\\Acceso-Datos\\Practicas\\AD-P01-Residuos\\data\\output")
+    checkArgs(args)
 }
 
 fun checkArgs(args: Array<String>) {
+    val procesamientoDatos = ProcesamientoDatos();
+
     if (args.size < 2 || args.size > 4) {
         //TODO: añadir logger indicando que los argumentos no son válidos.
         println("Argumentos inválidos.")
@@ -21,17 +21,20 @@ fun checkArgs(args: Array<String>) {
         val pathDestino = args[2]
 
         if (validateFileExtension(pathOrigen)) {
-            //TODO: añadir lo que hace la opción PARSER.
+            procesamientoDatos.opcionParser(pathOrigen, pathDestino)
+            //TODO: preguntar si hay que leer también de JSON y XML.
+
         } else {
             //TODO: Añadir logger indicando que el path no es válido.
-            println("El archivo no es válido.")
         }
+
     } else if (args[0].uppercase() == "RESUMEN" && numberArgs == 3) {
         val pathOrigen = args[1]
         val pathDestino = args[2]
 
         if (validateFileExtension(pathOrigen) && validatePath(pathOrigen) && validatePath(pathDestino)) {
-            //TODO: añadir lo que hace la opción RESUMEN.
+            procesamientoDatos.opcionResumen(pathOrigen, pathDestino)
+
         } else {
             //TODO: Añadir logger indicando que el path o el archivo no es válido.
             println("El path o el archivo no es válido.")
@@ -43,11 +46,13 @@ fun checkArgs(args: Array<String>) {
         val pathDestino = args[3]
 
         if (validateFileExtension(pathOrigen) && validatePath(pathOrigen) && validatePath(pathDestino)) {
-            //TODO: añadir lo que hace la opción RESUMEN - DISTRITO.
+            procesamientoDatos.opcionResumenDistrito(args[1], pathOrigen, pathDestino)
+
         } else {
             //TODO: Añadir logger indicando que el path o el archivo no es válido.
             println("El path o el archivo no es válido.")
         }
+
     } else {
         //TODO: Añadir logger indicando que los argumentos no son válidos.
     }

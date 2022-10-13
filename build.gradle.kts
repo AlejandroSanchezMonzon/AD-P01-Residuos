@@ -25,11 +25,6 @@ dependencies {
     // DataFrames de Kotlin
     implementation("org.jetbrains.kotlinx:dataframe:0.8.1")
 
-    //DSL para HTML: https://ktor.io/docs/html-dsl.html , https://kotlinlang.org/docs/typesafe-html-dsl.html
-    //implementation("io.ktor:ktor-server-html-builder:2.1.2")
-    //implementation("io.ktor:ktor-server-netty:2.1.2")
-    //implementation("org.jetbrains.kotlinx:kotlinx-html-js:0.8.0")
-
     // LetsPlots en Kotlin
     implementation("org.jetbrains.lets-plot:lets-plot-kotlin:4.1.0")
     implementation("org.jetbrains.lets-plot:lets-plot-image-export:2.5.0")

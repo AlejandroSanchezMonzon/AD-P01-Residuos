@@ -66,10 +66,8 @@ enum class TipoVia(val tipo: String) {
     BULEVAR("BULEVAR"),
     CAMINO("CAMINO"),
     PARTICULAR("PARTICULAR"),
-    //TODO Algunos enum vienen con "TRAVESÍA" con tilde.
     TRAVESIA("TRAVESIA"),
     PASAJE("PASAJE"),
-    //TODO Algunos enum vienen con "CALLEJÓN" con tilde.
     CALLEJON("CALLEJON"),
     CUESTA("CUESTA"),
     COSTANILLA("COSTANILLA"),
