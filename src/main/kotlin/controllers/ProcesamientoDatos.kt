@@ -8,6 +8,7 @@ import models.Bitacora
 import models.Contenedor
 import models.Residuo
 import models.TipoOpcion
+import mu.KotlinLogging
 import org.jetbrains.kotlinx.dataframe.DataFrame
 import org.jetbrains.kotlinx.dataframe.api.*
 import org.jetbrains.letsPlot.Stat.identity
@@ -20,6 +21,7 @@ import org.jetbrains.letsPlot.letsPlot
 import services.*
 import utils.dateFormatter
 import java.io.File
+import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.time.LocalDateTime
@@ -29,6 +31,8 @@ import kotlin.system.measureTimeMillis
 
 
 class ProcesamientoDatos {
+    private val logger = KotlinLogging.logger {}
+
     private val storageCSV = StorageCSV()
     private val storageJSON = StorageJSON()
     private val storageXML = StorageXML()
@@ -53,10 +57,18 @@ class ProcesamientoDatos {
             }
         } catch(e: Exception) {
             success = false
+
+
+            when(e){
+                is IllegalArgumentException -> logger.debug(e.message)
+            }
+
         }
 
         val bitacora = Bitacora(UUID.randomUUID(), LocalDateTime.now(), TipoOpcion.PARSER, success, ejecutionTime)
         storageXML.writeBitacora(pathDestino, bitacora.toDTO())
+
+
     }
 
     fun opcionResumen(pathOrigen: String, pathDestino: String) {
@@ -153,6 +165,10 @@ class ProcesamientoDatos {
             serviceHTML.writeHTML(pathDestino, html)
         } catch(e: Exception) {
             success = false
+
+            when(e){
+                is IOException -> logger.error {"Path incorrecto."}
+            }
         }
 
         val bitacora = Bitacora(UUID.randomUUID(), LocalDateTime.now(), TipoOpcion.RESUMEN_GLOBAL, success, ejecutionTime)
@@ -240,6 +256,10 @@ class ProcesamientoDatos {
 
         } catch(e: Exception) {
             success = false
+
+            when(e){
+                is IOException -> logger.error {"Path incorrecto."}
+            }
         }
 
         val bitacora = Bitacora(UUID.randomUUID(), LocalDateTime.now(), TipoOpcion.RESUMEN_CIUDAD, success, ejecutionTime)
@@ -356,7 +376,7 @@ class ProcesamientoDatos {
             .sortBy("nombreDistrito")
     }
 
-    //Suma de todo lo recogido en un año por distrito.
+    //Suma de to do lo recogido en un año por distrito.
     private fun cantidadResiduosAnualPorDistrito(listaResiduos: DataFrame<Residuo>): DataFrame<Residuo> {
         return listaResiduos
             .filter { it["anio"] == 2021 }
