@@ -33,7 +33,7 @@ class ServiceCSS {
             }
         """.trimIndent()
 
-        val ficheroHTML = File(directorio + File.separator + "web/style.css")
+        val ficheroHTML = File(directorio + File.separator + "style.css")
         ficheroHTML.writeText(codigoCSS)
     }
 }

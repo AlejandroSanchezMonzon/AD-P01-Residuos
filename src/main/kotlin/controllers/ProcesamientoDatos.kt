@@ -20,9 +20,11 @@ import org.jetbrains.letsPlot.letsPlot
 import services.*
 import utils.dateFormatter
 import java.io.File
+import java.nio.file.Files
 import java.nio.file.Paths
 import java.time.LocalDateTime
 import java.util.*
+import kotlin.io.path.exists
 import kotlin.system.measureTimeMillis
 
 
@@ -70,16 +72,15 @@ class ProcesamientoDatos {
         var success = true
         var ejecutionTime = 0L
         val html: String
-        val letsPlot = Paths.get(System.getProperty("user.dir") + File.separator + "lets-plot-images")
 
         try {
             ejecutionTime = measureTimeMillis {
                 inicializar(listaResiduos, listaContenedores)
                 numeroContenedoresPorTipoPorDistrito(listaContenedores)
                 mediaContenedoresPorTipoPorDistrito(listaContenedores)
-                graficoTotalContenedoresDistrito(listaContenedores)
+                graficoTotalContenedoresDistrito(listaContenedores, pathDestino)
                 mediaToneladasAnualesPorTipoResiuoPorDistrito(listaResiduos)
-                graficoMediaToneladasDistrito(listaResiduos)
+                graficoMediaToneladasDistrito(listaResiduos, pathDestino)
                 estadisticasToneladasAnualesPorTipoPorDistrito(listaResiduos)
                 cantidadResiduosAnualPorDistrito(listaResiduos)
                 cantidadResiduoPorTipoPorDistrito(listaResiduos)
@@ -114,15 +115,15 @@ class ProcesamientoDatos {
                                         <p>${mediaContenedoresPorTipoPorDistrito(listaContenedores)}</p>
                                     </li>
                                     
-                                    <li>
-                                        <img title="Gráfico con el total de contenedores por distrito" src="./lets-plot-images/contenedores_distritos.png"></img>
+                                    <li>Gráfico con el total de contenedores por distrito:
+                                        <p><img title="Gráfico con el total de contenedores por distrito" src="./images/contenedores_distritos.png"></img></p>
                                     </li>
                                     
                                     <li>Media de toneladas anuales de recogidas por cada tipo de basura agrupadas por distrito: 
                                         <p>${mediaToneladasAnualesPorTipoResiuoPorDistrito(listaResiduos)}</p>
                                     </li>
-                                    <li>
-                                        <img title=" Gráfico de media de toneladas mensuales de recogida de basura por distrito" src="./lets-plot-images/media_toneladas_distrito.png"></img>
+                                    <li>Gráfico de media de toneladas mensuales de recogida de basura por distrito:
+                                        <p><img title="Gráfico de media de toneladas mensuales de recogida de basura por distrito" src="./images/media_toneladas_distrito.png"></img></p>
                                     </li>
                                     
                                     <li>Máximo, mínimo , media y desviación de toneladas anuales de recogidas por cada tipo de basura agrupadas por distrito: 
@@ -150,7 +151,7 @@ class ProcesamientoDatos {
 
             serviceCSS.writeCSS(pathDestino)
             serviceHTML.writeHTML(pathDestino, html)
-        }catch(e: Exception) {
+        } catch(e: Exception) {
             success = false
         }
 
@@ -172,16 +173,15 @@ class ProcesamientoDatos {
         var success = true
         var ejecutionTime = 0L
         val html: String
-        val letsPlot = Paths.get(System.getProperty("user.dir") + File.separator + "lets-plot-images")
 
         try {
             ejecutionTime = measureTimeMillis {
                 inicializar(listaResiduos, listaContenedores)
                 numeroContenedoresPorTipoEnDistrito(listaContenedores, distrito)
                 cantidadToneladasPorResiduoEnDistrito(listaResiduos, distrito)
-                graficoTotalToneladasResiduoDistrito(listaResiduos, distrito)
+                graficoTotalToneladasResiduoDistrito(listaResiduos, distrito, pathDestino)
                 estadisticasMensualesPorTipoEnDistrito(listaResiduos, distrito)
-                graficoMaxMinMediaPorMeses(listaResiduos, distrito)
+                graficoMaxMinMediaPorMeses(listaResiduos, distrito, pathDestino)
             }
 
             html = """
@@ -213,15 +213,15 @@ class ProcesamientoDatos {
                                         <p>${cantidadToneladasPorResiduoEnDistrito(listaResiduos, distrito)}</p>
                                     </li>
                                     
-                                    <li>
-                                        <img title="Gráfico con el total de toneladas por residuo en ese distrito:" src="./lets-plot-images/contenedores_distritos.png"></img>
+                                    <li>Gráfico con el total de toneladas por residuo en ese distrito:
+                                        <p><img title="Gráfico con el total de toneladas por residuo en ese distrito" src="./images/toneladas_tipo_$distrito.png"></img></p>
                                     </li>
                                     
                                     <li>Máximo, mínimo , media y desviación por mes por residuo en dicho distrito: 
                                         <p>${estadisticasMensualesPorTipoEnDistrito(listaResiduos, distrito)}</p>
                                     </li>
-                                    <li>
-                                        <img title="Gráfica del máximo, mínimo y media por meses en dicho distrito." src="./lets-plot-images/media_toneladas_distrito.png"></img>
+                                    <li>Gráfica del máximo, mínimo y media por meses en dicho distrito
+                                        <p><img title="Gráfica del máximo, mínimo y media por meses en dicho distrito" src="./images/media_min_max_mensual_$distrito.png"></img></p>
                                     </li>
                                 </ul>
                             </div>
@@ -238,7 +238,7 @@ class ProcesamientoDatos {
             serviceCSS.writeCSS(pathDestino)
             serviceHTML.writeHTMLDistrito(pathDestino, html, distrito)
 
-        }catch(e: Exception) {
+        } catch(e: Exception) {
             success = false
         }
 
@@ -272,7 +272,7 @@ class ProcesamientoDatos {
     }
 
     //Gráfico con el total de contenedores por distrito.
-    private fun graficoTotalContenedoresDistrito(listaContenedores: DataFrame<Contenedor>) {
+    private fun graficoTotalContenedoresDistrito(listaContenedores: DataFrame<Contenedor>, pathDestino: String) {
         val res = listaContenedores
             .groupBy("distrito", "tipo")
             .aggregate {
@@ -294,7 +294,12 @@ class ProcesamientoDatos {
             title = "Total de contenedores por distrito."
         )
 
-        ggsave(fig, "contenedores_distritos.png")
+        val path = pathDestino + File.separator + "images"
+        if (!Paths.get(path).exists()) {
+            Files.createDirectory(Paths.get(pathDestino + File.separator + "images" + File.separator))
+        }
+
+        ggsave(fig, path = path + File.separator, filename = "contenedores_distritos.png")
     }
 
     //Media de toneladas anuales de recogidas por cada tipo de basura agrupadas por distrito.
@@ -308,7 +313,7 @@ class ProcesamientoDatos {
     }
 
     //Gráfico de media de toneladas mensuales de recogida de basura por distrito.
-    private fun graficoMediaToneladasDistrito(listaResiduos: DataFrame<Residuo>) {
+    private fun graficoMediaToneladasDistrito(listaResiduos: DataFrame<Residuo>, pathDestino: String) {
         val res = listaResiduos
             .groupBy("nombreDistrito", "mes")
             .aggregate {
@@ -330,7 +335,12 @@ class ProcesamientoDatos {
             title = "Media de toneladas mensuales de recogida de basura por distrito."
         )
 
-        ggsave(fig, "media_toneladas_distrito.png")
+        val path = pathDestino + File.separator + "images"
+        if (!Paths.get(path).exists()) {
+            Files.createDirectory(Paths.get(pathDestino + File.separator + "images" + File.separator))
+        }
+
+        ggsave(fig, path = path + File.separator, filename = "media_toneladas_distrito.png")
     }
 
     //Máximo, mínimo , media y desviación de toneladas anuales de recogidas por cada tipo de basura agrupadas por distrito.
@@ -372,11 +382,12 @@ class ProcesamientoDatos {
 //Número de contenedores de cada tipo que hay en este distrito.
     private fun numeroContenedoresPorTipoEnDistrito(listaContenedores: DataFrame<Contenedor>, distrito: String): DataFrame<Contenedor> {
         return listaContenedores
-            .filter { it["distrito"] == distrito }
-            .groupBy("tipo")
+            .filter { it["distrito"] == distrito.uppercase() }
+            .groupBy("distrito", "tipo")
             .aggregate {
-                count() into "NúmeroContenedores"
+                count() into "NumeroContenedores"
             }
+            .sortBy("distrito")
     }
 
     //Total de toneladas recogidas en ese distrito por residuo.
@@ -390,7 +401,7 @@ class ProcesamientoDatos {
     }
 
     //Gráfico con el total de toneladas por residuo en ese distrito.
-    private fun graficoTotalToneladasResiduoDistrito(listaResiduos: DataFrame<Residuo>, distrito: String) {
+    private fun graficoTotalToneladasResiduoDistrito(listaResiduos: DataFrame<Residuo>, distrito: String, pathDestino: String) {
         val res = listaResiduos
             .filter { it["nombreDistrito"] == distrito }
             .groupBy("tipo", "toneladas")
@@ -413,7 +424,12 @@ class ProcesamientoDatos {
             title = "Total de toneladas por residuo en $distrito"
         )
 
-        ggsave(fig, "toneladas_tipo_$distrito.png")
+        val path = pathDestino + File.separator + "images"
+        if (!Paths.get(path).exists()) {
+            Files.createDirectory(Paths.get(pathDestino + File.separator + "images" + File.separator))
+        }
+
+        ggsave(fig, path = path + File.separator, filename = "toneladas_tipo_$distrito.png")
     }
 
     //Máximo, mínimo , media y desviación por mes por residuo en dicho distrito.
@@ -431,7 +447,7 @@ class ProcesamientoDatos {
     }
 
     //Gráfica del máximo, mínimo y media por meses en dicho distrito.
-    private fun graficoMaxMinMediaPorMeses(listaResiduos: DataFrame<Residuo>, distrito: String) {
+    private fun graficoMaxMinMediaPorMeses(listaResiduos: DataFrame<Residuo>, distrito: String, pathDestino: String) {
         val res = listaResiduos.filter { it["nombreDistrito"] == distrito }
             .groupBy("nombreDistrito", "mes")
             .aggregate {
@@ -471,6 +487,11 @@ class ProcesamientoDatos {
             title = "Máximo, mínimo y media por meses."
         )
 
-        ggsave(fig, "media_min_max_mensual_$distrito.png")
+        val path = pathDestino + File.separator + "images"
+        if (!Paths.get(path).exists()) {
+            Files.createDirectory(Paths.get(pathDestino + File.separator + "images" + File.separator))
+        }
+
+        ggsave(fig, path = path + File.separator, filename = "media_min_max_mensual_$distrito.png")
     }
 }
