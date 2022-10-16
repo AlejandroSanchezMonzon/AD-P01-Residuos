@@ -2,7 +2,10 @@ package dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import mu.KotlinLogging
 import nl.adaptivity.xmlutil.serialization.XmlElement
+
+private val logger = KotlinLogging.logger{}
 
 @Serializable
 @SerialName("Contenedor")

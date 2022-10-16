@@ -3,12 +3,16 @@ package services
 import dto.ContenedorDTO
 import dto.IAlmacenable
 import dto.ResiduoDTO
+import mu.KotlinLogging
 import utils.parseDouble
 import utils.parseNull
 import java.io.File
 
+private val logger = KotlinLogging.logger{}
+
 class StorageCSV{
     fun readResiduo(directorio: String): List<ResiduoDTO>{
+        logger.info("Leyendo CSV.")
         val ficheroResiduo = File(directorio + File.separator + "modelo_residuos_2021.csv")
         if(ficheroResiduo.exists()){
             return ficheroResiduo.readLines().drop(1)
@@ -31,6 +35,7 @@ class StorageCSV{
     }
 
      fun writeResiduo(directorio: String, residuos: List<ResiduoDTO>) {
+        logger.info("Escribiendo CSV.")
         val ficheroResiduo = File(directorio + File.separator + "residuos_resultado_parser.csv")
         ficheroResiduo.writeText("anio;mes;lote;residuo;distrito;nombreDistrito;toneladas")
         residuos.forEach {
@@ -39,6 +44,7 @@ class StorageCSV{
     }
 
     fun readContenedor(directorio: String): List<ContenedorDTO>{
+        logger.info("Leyendo CSV.")
         val ficheroContenedor = File(directorio + File.separator + "contenedores_varios.csv")
         if(ficheroContenedor.exists()){
             return ficheroContenedor.readLines().drop(1)
@@ -70,6 +76,7 @@ class StorageCSV{
     }
 
     fun writeContenedor(directorio: String, contenedores: List<ContenedorDTO>) {
+        logger.info("Escribiendo CSV.")
         val ficheroContenedor = File(directorio + File.separator + "contenedores_resultado_parser.csv")
         //TODO: tiene que tener la misma cabecera o podemos cambiar los nombres de las columnas
         ficheroContenedor.writeText("codigo;contenedor;modelo;descripcion;cantidad;lote;distrito;barrio;via;nombre;numero;coordenadaX,coordenadaY;longitud;latitud;direccion")

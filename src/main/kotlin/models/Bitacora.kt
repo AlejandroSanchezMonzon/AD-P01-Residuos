@@ -1,7 +1,10 @@
 package models
 
+import mu.KotlinLogging
 import java.time.LocalDateTime
 import java.util.*
+
+private val logger = KotlinLogging.logger{}
 
 data class Bitacora(
     val id: UUID,
