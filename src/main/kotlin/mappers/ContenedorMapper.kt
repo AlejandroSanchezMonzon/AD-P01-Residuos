@@ -4,8 +4,11 @@ import dto.ContenedorDTO
 import models.Contenedor
 import models.TipoContenedor
 import models.TipoVia
+import mu.KotlinLogging
 
+private val logger = KotlinLogging.logger{}
 fun ContenedorDTO.toContenedor(): Contenedor {
+    logger.info("Mapeando DTO a Contendor.")
     return Contenedor(
         codigo = this.codigo,
         tipo = TipoContenedor.from(this.tipo),
@@ -28,6 +31,7 @@ fun ContenedorDTO.toContenedor(): Contenedor {
 
 //TODO: En la documentación explicar por qué no nos hace falta este método
 fun Contenedor.toDTO(): ContenedorDTO {
+    logger.info("Mapeando Contenedor a DTO.")
     return ContenedorDTO(
         codigo = this.codigo,
         tipo = this.tipo.toString(),

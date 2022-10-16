@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.com.intellij.openapi.vfs.StandardFileSystems.jar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -10,6 +11,18 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+}
+
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "MainKt"
+    }
+
+    configurations["compileClasspath"].forEach{
+        file: File -> from(zipTree(file.absoluteFile))
+    }
+
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 dependencies {
@@ -30,8 +43,9 @@ dependencies {
     implementation("org.jetbrains.lets-plot:lets-plot-image-export:2.5.0")
 
     // Loggers para Kotlin
-    implementation("io.github.microutils:kotlin-logging-jvm:3.0.0")
+    implementation ("io.github.microutils:kotlin-logging-jvm:3.0.0")
     implementation("ch.qos.logback:logback-classic:1.4.3")
+    implementation("ch.qos.logback:logback-core:1.4.3")
 }
 
 tasks.test {

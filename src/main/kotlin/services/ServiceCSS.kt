@@ -1,9 +1,13 @@
 package services
 
+import mu.KotlinLogging
 import java.io.File
+
+private val logger = KotlinLogging.logger{}
 
 class ServiceCSS {
     fun writeCSS(directorio: String) {
+        logger.info("Escribiendo CSS.")
         val codigoCSS = """
             body {
                 background-color: lightblue;
