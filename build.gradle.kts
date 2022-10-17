@@ -47,9 +47,12 @@ dependencies {
     implementation ("io.github.microutils:kotlin-logging-jvm:3.0.0")
     implementation("ch.qos.logback:logback-classic:1.4.3")
     implementation("ch.qos.logback:logback-core:1.4.3")
-
+    
     //Doka para sustituir a JDOC y KDOC
     implementation("org.jetbrains.dokka:kotlin-as-java-plugin:1.7.20")
+    
+    // JUnit para tests
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.1")
 }
 
 tasks.test {

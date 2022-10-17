@@ -9,6 +9,10 @@ import mu.KotlinLogging
 import java.time.LocalDateTime
 import java.util.*
 
+private val logger = KotlinLogging.logger{}
+
+
+//TODO: encerrarlas en una lista
 data class Bitacora(
     val id: UUID,
     val instante: LocalDateTime,

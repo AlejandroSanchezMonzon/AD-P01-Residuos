@@ -16,23 +16,17 @@ private val logger = KotlinLogging.logger{}
  *
  * @return aux, un valor auxiliar que devuvle "null" si el campo examinado está vacío (en blanco).
  */
-fun parseNull(s: String): String {
+ 
+fun parseNull(cadena: String): String {
     logger.info("Formateando campos vacíos.")
     var aux = ""
-    if (s.isEmpty()) {
+    if (cadena.isEmpty()) {
         aux = "null"
     }
     return aux
 }
 
-/**
- * Función que recibe un campo y parsea el valor, cambiando el carácter "," a "." y lo castea a Double.
- *
- * @param s El valor en tipo String del campo a parsear.
- *
- * @return El valor de dicho campo ya formateado, cambiando "," por ".".
- */
-fun parseDouble(s: String): Double {
+fun parseDouble(cadena: String): Double {
     logger.info("Formateando decimales.")
-    return s.replace(",", ".").toDouble()
+    return cadena.replace(",", ".").toDouble()
 }

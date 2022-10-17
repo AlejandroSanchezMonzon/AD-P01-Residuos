@@ -23,6 +23,7 @@ private val logger = KotlinLogging.logger{}
 fun dateFormatter(date: LocalDateTime): String {
     logger.info("Formateando fecha a la zona horaria de España.")
     return date.format(
-        DateTimeFormatter.ofLocalizedDate
-        (FormatStyle.FULL).withLocale(Locale("es", "ES")))
+        DateTimeFormatter
+            .ofLocalizedDate(FormatStyle.FULL)
+            .withLocale(Locale("es", "ES")))
 }

@@ -23,6 +23,8 @@ class StorageJSON {
      *
      * @return Unit, no devolveremos nada, pero llamamos a los métodos para la creación y escritura del JSON.
      */
+     
+    //TODO: implementar lectura
     fun writeResiduo(directorio: String, residuoDTO: List<ResiduoDTO>) {
         logger.info("Escribiendo JSON.")
         val ficheroResiduo = File(directorio + File.separator + "residuos_resultado_parser.json")

@@ -24,6 +24,8 @@ class StorageXML {
      *
      * @return Unit, no devolveremos nada, pero llamamos a los métodos para la creación y escritura del XML.
      */
+     
+    //TODO: implementar lectura
     fun writeResiduo(directorio: String, residuosDTO: List<ResiduoDTO>) {
         logger.info("Escribiendo XML.")
         val ficheroResiduos = File(directorio + File.separator + "residuos_resultado_parser.xml")
