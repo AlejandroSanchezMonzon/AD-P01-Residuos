@@ -8,7 +8,7 @@ import mu.KotlinLogging
 
 private val logger = KotlinLogging.logger{}
 fun ContenedorDTO.toContenedor(): Contenedor {
-    logger.info("Mapeando DTO a Contendor.")
+    logger.info("Mapeando DTO a Contenedor.")
     return Contenedor(
         codigo = this.codigo,
         tipo = TipoContenedor.from(this.tipo),
