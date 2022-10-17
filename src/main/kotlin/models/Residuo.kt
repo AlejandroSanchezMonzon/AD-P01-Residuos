@@ -19,7 +19,13 @@ data class Residuo(
 
 ) {
     override fun toString(): String {
-        return "Residuo(anio=$anio, mes='$mes', lote=$lote, residuo=$tipo, distrito=$distrito, nombreDistrito='$nombreDistrito', toneladas=$toneladas)"
+        return "Residuo(anio=$anio, " +
+                "mes='$mes', " +
+                "lote=$lote, " +
+                "residuo=$tipo, " +
+                "distrito=$distrito, " +
+                "nombreDistrito='$nombreDistrito', " +
+                "toneladas=$toneladas)"
     }
 }
 

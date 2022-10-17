@@ -11,6 +11,7 @@ import java.io.File
 private val logger = KotlinLogging.logger{}
 
 class StorageXML {
+    //TODO: implementar lectura
     fun writeResiduo(directorio: String, residuosDTO: List<ResiduoDTO>) {
         logger.info("Escribiendo XML.")
         val ficheroResiduos = File(directorio + File.separator + "residuos_resultado_parser.xml")

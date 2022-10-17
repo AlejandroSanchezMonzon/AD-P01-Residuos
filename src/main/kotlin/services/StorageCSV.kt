@@ -77,7 +77,7 @@ class StorageCSV {
         logger.info("Escribiendo CSV.")
         val ficheroContenedor = File(directorio + File.separator + "contenedores_resultado_parser.csv")
         //TODO: tiene que tener la misma cabecera o podemos cambiar los nombres de las columnas
-        ficheroContenedor.writeText("codigo;contenedor;modelo;descripcion;cantidad;lote;distrito;barrio;via;nombre;numero;coordenadaX,coordenadaY;longitud;latitud;direccion")
+        ficheroContenedor.writeText("codigo;contenedor;modelo;descripcion;cantidad;lote;distrito;barrio;via;nombre;numero;coordenadaX;coordenadaY;longitud;latitud;direccion")
         contenedores.forEach {
             ficheroContenedor.appendText("\n${it.codigo};${it.tipo};${it.modelo};${it.descripcion};${it.cantidad};${it.lote};${it.distrito};${it.barrio};${it.via};${it.nombre};${it.numero};${it.coordenadaX};${it.coordenadaY};${it.longitud};${it.latitud}${it.direccion}")
         }
