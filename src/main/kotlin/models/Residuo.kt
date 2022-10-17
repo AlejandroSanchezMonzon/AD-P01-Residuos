@@ -1,10 +1,14 @@
+/**
+ * @author Mireya Sánchez Pinzón
+ * @author Alejandro Sánchez Monzón
+ */
+
 package models
 
 import dto.IAlmacenable
 import mu.KotlinLogging
 import org.jetbrains.kotlinx.dataframe.annotations.DataSchema
 
-private val logger = KotlinLogging.logger{}
 
 @DataSchema
 data class Residuo(
@@ -18,6 +22,11 @@ data class Residuo(
     val toneladas: Double
 
 ) {
+    /**
+     * Método que escribe una lista con las variables del objeto Residuo y el valor de cada una de ellas.
+     *
+     * @return String, la lista escrita con las varables del objeto.
+     */
     override fun toString(): String {
         return "Residuo(anio=$anio, " +
                 "mes='$mes', " +
@@ -49,6 +58,15 @@ enum class TipoResiduo(val tipo: String) {
     CAMA_CABALLO("CAMA DE CABALLO");
 
     companion object {
+        /**
+         * Función que parsea los Enums del objeto Residuo. Indicando su equivalencia al valor de tipo String.
+         *
+         * @param tipo El enum en formato String equivalente al valor de la clase Enum.
+         *
+         * @throws IllegalArgumentException Excepción que el método lanzará si el String que trata de parsear no eixste, o el tipo no existe.
+         *
+         * @return TipoResiduo, un enum que variará dependiendo del valor de dicha variable.
+         */
         fun from(tipo: String): TipoResiduo {
             return when (tipo.uppercase()) {
                 "RESTO" -> RESTO

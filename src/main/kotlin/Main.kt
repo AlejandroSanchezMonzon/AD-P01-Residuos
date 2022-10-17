@@ -1,3 +1,8 @@
+/**
+ * @author Mireya Sánchez Pinzón
+ * @author Alejandro Sánchez Monzón
+ */
+
 import controllers.ProcesamientoDatos
 import mu.KotlinLogging
 import utils.validatePath
@@ -5,10 +10,22 @@ import utils.validatePath
 private val logger = KotlinLogging.logger{}
 
     fun main(args: Array<String>) {
-        logger.info("Iniciando programa ...")
-        checkArgs(args)
+        logger.info("Iniciando programa...")
+        //checkArgs(args)
+
+        val procesamientoDatos = ProcesamientoDatos()
+        procesamientoDatos.opcionResumen("src/main/resources", "data/output")
     }
 
+    /**
+    * Función principal del método main. Este se ocupa de comprobar de que los argumentos que pasaremos en el archivo .JAR
+     * son aceptados en base a su orden, formato y funcionamiento.
+     *
+     * @param args Los argumentos que pasaremos por parámetros al .JAR
+     *
+     * @return Unit, no devuelve ningun valor, es un método raíz que sirve para hacer llamadas a otros métodos,
+     * en este caso, para construir la estructura de la aplicación.
+    */
     fun checkArgs(args: Array<String>) {
         val procesamientoDatos = ProcesamientoDatos()
 
