@@ -1,3 +1,8 @@
+/**
+ * @author Mireya Sánchez Pinzón
+ * @author Alejandro Sánchez Monzón
+ */
+
 package controllers
 
 import jetbrains.datalore.base.values.Color
@@ -11,6 +16,7 @@ import models.TipoOpcion
 import mu.KotlinLogging
 import org.jetbrains.kotlinx.dataframe.DataFrame
 import org.jetbrains.kotlinx.dataframe.api.*
+import org.jetbrains.kotlinx.dataframe.io.html
 import org.jetbrains.letsPlot.Stat.identity
 import org.jetbrains.letsPlot.export.ggsave
 import org.jetbrains.letsPlot.geom.geomBar
@@ -39,6 +45,18 @@ class ProcesamientoDatos {
     private val serviceHTML = ServiceHTML()
     private val serviceCSS = ServiceCSS()
 
+    /**
+     * Este método es el encargado de ejecutar la opción "PARSER" del programa. Leyendo de los CSV indicados que encontrará en el Path Origen la información,
+     * procesando la misma, y sacandola en formato JSON, XML y CSV de nuevo al Path Destino.
+     *
+     * @param pathOrigen Es la ruta contenedora de la cual leeremos los ficheros CSV.
+     * @param pathDestino Es la ruta en la cual escribiremos los nuevos ficheros.
+     *
+     * @exception Exception En caso de que el path Destino u Origen no existan, que el fichero a leer no este presente, o situaciones parecidas,
+     * el programa lanza una excpeción que es controlada por el propio método.
+     *
+     * @return  Unit, es un método que sirve de llamada a otros métodos.
+     */
     fun opcionParser(pathOrigen: String, pathDestino: String) {
         logger.info("Ejecutando opción parser.")
         var success = true
@@ -70,10 +88,20 @@ class ProcesamientoDatos {
         logger.info("Creando archivo bitácora.")
         val bitacora = Bitacora(UUID.randomUUID(), LocalDateTime.now(), TipoOpcion.PARSER, success, ejecutionTime)
         storageXML.writeBitacora(pathDestino, bitacora.toDTO())
-
-
     }
 
+    /**
+     * Este método ejecuta la opción "RESUMEN" del programa. Tras leer los CSV, JSON o XML contenidos en el Path Origen,
+     * realiza una serie de consultas y crea un documento HTML con la información registrada.
+     *
+     * @param pathOrigen Ruta de la carpeta contenedora de los archivos CSV, XML o JSON que leeremos para realizar las consultas.
+     * @param pathDestino Ruta a la carpeta en la cual guardaremos el fichero HTML y las subcarpetas necesarias para generar el mismo.
+     *
+     * @exception Exception En caso de que el path Destino u Origen no existan, que el fichero a leer no este presente, o situaciones parecidas,
+     * el programa lanza una excpeción que es controlada por el propio método.
+     *
+     * @return  Unit, es un método que sirve de llamada a otros métodos.
+     */
     fun opcionResumen(pathOrigen: String, pathDestino: String) {
         logger.info("Ejecutando opción resumen global.")
         val listaResiduos = storageCSV
@@ -184,6 +212,18 @@ class ProcesamientoDatos {
 
     }
 
+    /**
+     * Este método ejecuta la opción "RESUMEN DISTRITO" del programa. Tras leer los CSV, JSON o XML contenidos en el Path Origen,
+     * realiza una serie de consultas y crea un documento HTML con la información registrada.
+     *
+     * @param pathOrigen Ruta de la carpeta contenedora de los archivos CSV, XML o JSON que leeremos para realizar las consultas de dicho distrito.
+     * @param pathDestino Ruta a la carpeta en la cual guardaremos el fichero HTML y las subcarpetas necesarias para generar el mismo.
+     *
+     * @exception Exception En caso de que el path Destino u Origen no existan, que el fichero a leer no este presente, o situaciones parecidas,
+     * el programa lanza una excpeción que es controlada por el propio método.
+     *
+     * @return  Unit, es un método que sirve de llamada a otros métodos.
+     */
     fun opcionResumenDistrito(distrito: String, pathOrigen: String, pathDestino: String) {
         logger.info("Ejecutando opción resumen distrito concreto.")
         val listaResiduos = storageCSV
@@ -280,33 +320,63 @@ class ProcesamientoDatos {
 
     }
 
+    /**
+     * Esta función se ocupa de inicializar los dataframes que serán necesarios para la realización de las consultas.
+     * Hemos utilizado .toDataFrame() para agrupar en uno mismo todos los datos, y no tener que segmentar las mismas. Ya que nos parecía más cómodo y "clean code".
+     *
+     * @param listaResiduos Dataframe de Residuos, utilizado para trabajar con las consultas del mismo.
+     * @param listaContenedores Dataframe de Contenedores, utilizado para trabajar con las consultas del mismo.
+     *
+     * @return Unit, es un método que sirve como inicialización.
+     */
     private fun inicializar(listaResiduos: DataFrame<Residuo>, listaContenedores: DataFrame<Contenedor>) {
         logger.info("Inicializando DataFrames.")
         listaResiduos.cast<Residuo>()
         listaContenedores.cast<Contenedor>()
     }
 
-    private fun numeroContenedoresPorTipoPorDistrito(listaContenedores: DataFrame<Contenedor>): DataFrame<Contenedor> {
+    /**
+     * Este método se ocupa de la consulta de el número de contenedores de cada tipo que hay en cada distrito.
+     *
+     * @param listaContenedores Dataframe necesario para la realización de dicha consulta.
+     *
+     * @return La consulta indicada, la cual luego será pasada como un valor al HTML.
+     */
+    private fun numeroContenedoresPorTipoPorDistrito(listaContenedores: DataFrame<Contenedor>): String {
         logger.info("Consultando el número de contenedores de cada tipo que hay en cada distrito.")
         return listaContenedores
             .groupBy("distrito", "tipo")
             .aggregate {
                 sum("cantidad") into "Total"
             }
-            .sortBy("distrito")
+            .sortBy("distrito").html()
     }
 
 
-    private fun mediaContenedoresPorTipoPorDistrito(listaContenedores: DataFrame<Contenedor>): DataFrame<Contenedor> {
+    /**
+     * Este método se ocupa de la consulta de la media de contenedores de cada tipo que hay en cada distrito.
+     *
+     * @param listaContenedores Dataframe necesario para la realización de dicha consulta.
+     *
+     * @return La consulta indicada, la cual luego será pasada como un valor al HTML.
+     */
+    private fun mediaContenedoresPorTipoPorDistrito(listaContenedores: DataFrame<Contenedor>): String {
         logger.info("Consultando media de contenedores de cada tipo que hay en cada distrito.")
         return listaContenedores
             .groupBy("distrito", "tipo")
             .aggregate {
                 mean("cantidad") into "Media"
             }
-            .sortBy("distrito")
+            .sortBy("distrito").html()
     }
 
+    /**
+     * Este método se ocupa de crear el gráfico con el total de contenedores por distrito.
+     *
+     * @param listaContenedores Dataframe necesario para la realización de dicha consulta.
+     *
+     * @return No devuelve un lista, sino que llama a un método llamado "ggsave()" que genera una imagen, la cual contiene la gráfica.
+     */
     private fun graficoTotalContenedoresDistrito(listaContenedores: DataFrame<Contenedor>, pathDestino: String) {
         logger.info("Creando gráfico con el total de contenedores por distrito. ")
         val res = listaContenedores
@@ -338,16 +408,30 @@ class ProcesamientoDatos {
         ggsave(fig, path = path + File.separator, filename = "contenedores_distritos.png")
     }
 
-    private fun mediaToneladasAnualesPorTipoResiuoPorDistrito(listaResiduos: DataFrame<Residuo>): DataFrame<Residuo> {
+    /**
+     * Este método se ocupa de la consulta de media de toneladas anuales de recogidas por cada tipo de basura agrupadas por distrito.
+     *
+     * @param listaResiduos Dataframe necesario para la realización de dicha consulta.
+     *
+     * @return La consulta indicada, la cual luego será pasada como un valor al HTML.
+     */
+    private fun mediaToneladasAnualesPorTipoResiuoPorDistrito(listaResiduos: DataFrame<Residuo>): String {
         logger.info("Consultando media de toneladas anuales de recogidas por cada tipo de basura agrupadas por distrito.")
         return listaResiduos
             .groupBy("nombreDistrito", "tipo", "anio")
             .aggregate {
                 mean("toneladas") into "Media"
             }
-            .sortBy("nombreDistrito")
+            .sortBy("nombreDistrito").html()
     }
 
+    /**
+     * Este método se ocupa de crear el gráfico de media de toneladas mensuales de recogida de basura por distrito.
+     *
+     * @param listaResiduos Dataframe necesario para la realización de dicha consulta.
+     *
+     * @return No devuelve un lista, sino que llama a un método llamado "ggsave()" que genera una imagen, la cual contiene la gráfica.
+     */
     private fun graficoMediaToneladasDistrito(listaResiduos: DataFrame<Residuo>, pathDestino: String) {
         logger.info("Creando gráfico de media de toneladas mensuales de recogida de basura por distrito.")
         val res = listaResiduos
@@ -379,8 +463,15 @@ class ProcesamientoDatos {
         ggsave(fig, path = path + File.separator, filename = "media_toneladas_distrito.png")
     }
 
-    private fun estadisticasToneladasAnualesPorTipoPorDistrito(listaResiduos: DataFrame<Residuo>): DataFrame<Residuo> {
-        logger.info("Consultando máximo, mínimo, media y desviación de toneladas anuales de recogidas por cada tipo de basura agrupadas por distrito")
+    /**
+     * Este método se ocupa de la consulta de máximo, mínimo, media y desviación de toneladas anuales de recogidas por cada tipo de basura agrupadas por distrito
+     *
+     * @param listaResiduos Dataframe necesario para la realización de dicha consulta.
+     *
+     * @return La consulta indicada, la cual luego será pasada como un valor al HTML.
+     */
+    private fun estadisticasToneladasAnualesPorTipoPorDistrito(listaResiduos: DataFrame<Residuo>): String {
+        logger.info("Consultando máximo, mínimo, media y desviación de toneladas anuales de recogidas por cada tipo de basura agrupadas por distrito.")
         return listaResiduos
             .groupBy("nombreDistrito", "tipo", "anio")
             .aggregate {
@@ -389,10 +480,17 @@ class ProcesamientoDatos {
                 max("toneladas") into "Máximo"
                 std("toneladas").toString() into "Desviación"
             }
-            .sortBy("nombreDistrito")
+            .sortBy("nombreDistrito").html()
     }
 
-    private fun cantidadResiduosAnualPorDistrito(listaResiduos: DataFrame<Residuo>): DataFrame<Residuo> {
+    /**
+     * Este método se ocupa de la consulta de suma de to do lo recogido en un año por distrito.
+     *
+     * @param listaResiduos Dataframe necesario para la realización de dicha consulta.
+     *
+     * @return La consulta indicada, la cual luego será pasada como un valor al HTML.
+     */
+    private fun cantidadResiduosAnualPorDistrito(listaResiduos: DataFrame<Residuo>): String {
         logger.info("Consultando suma de to do lo recogido en un año por distrito.")
         return listaResiduos
             .filter { it["anio"] == 2021 }
@@ -400,20 +498,34 @@ class ProcesamientoDatos {
             .aggregate {
                 sum("toneladas") into "TotalAnual"
             }
-            .sortBy("nombreDistrito")
+            .sortBy("nombreDistrito").html()
     }
 
-    private fun cantidadResiduoPorTipoPorDistrito(listaResiduos: DataFrame<Residuo>): DataFrame<Residuo> {
+    /**
+     * Este método se ocupa de la consulta de, por cada distrito, obtener para cada tipo de residuo la cantidad recogida.
+     *
+     * @param listaResiduos Dataframe necesario para la realización de dicha consulta.
+     *
+     * @return La consulta indicada, la cual luego será pasada como un valor al HTML.
+     */
+    private fun cantidadResiduoPorTipoPorDistrito(listaResiduos: DataFrame<Residuo>): String {
         logger.info("Consultando por cada distrito obtener para cada tipo de residuo la cantidad recogida.")
         return listaResiduos
             .groupBy("nombreDistrito", "tipo")
             .aggregate {
                 sum("toneladas") into "TotalResiduo"
             }
-            .sortBy("nombreDistrito")
+            .sortBy("nombreDistrito").html()
     }
 
-    private fun numeroContenedoresPorTipoEnDistrito(listaContenedores: DataFrame<Contenedor>, distrito: String): DataFrame<Contenedor> {
+    /**
+     * Este método se ocupa de la consulta del número de contenedores de cada tipo que hay en dicho distrito.
+     *
+     * @param listaContenedores Dataframe necesario para la realización de dicha consulta.
+     *
+     * @return La consulta indicada, la cual luego será pasada como un valor al HTML.
+     */
+    private fun numeroContenedoresPorTipoEnDistrito(listaContenedores: DataFrame<Contenedor>, distrito: String): String {
         logger.info("Consultando número de contenedores de cada tipo que hay en $distrito")
         return listaContenedores
             .filter { it["distrito"] == distrito.uppercase() }
@@ -421,10 +533,17 @@ class ProcesamientoDatos {
             .aggregate {
                 sum("cantidad") into "NumeroContenedores"
             }
-            .sortBy("distrito")
+            .sortBy("distrito").html()
     }
 
-    private fun cantidadToneladasPorResiduoEnDistrito(listaResiduos: DataFrame<Residuo>, distrito: String): DataFrame<Residuo> {
+    /**
+     * Este método se ocupa de la consulta del total de toneladas recogidas en dicho distrito por residuos.
+     *
+     * @param listaResiduos Dataframe necesario para la realización de dicha consulta.
+     *
+     * @return La consulta indicada, la cual luego será pasada como un valor al HTML.
+     */
+    private fun cantidadToneladasPorResiduoEnDistrito(listaResiduos: DataFrame<Residuo>, distrito: String): String {
         logger.info("Consultando total de toneladas recogidas en $distrito por residuo.")
         return listaResiduos
             .filter { it["nombreDistrito"] == distrito }
@@ -432,8 +551,16 @@ class ProcesamientoDatos {
             .aggregate {
                 sum("toneladas") into "Toneladas"
             }
+            .html()
     }
 
+    /**
+     * Este método se ocupa de crear el gráfico con el total de toneladas por residuo en dicho distrito.
+     *
+     * @param listaResiduos Dataframe necesario para la realización de dicha consulta.
+     *
+     * @return No devuelve un lista, sino que llama a un método llamado "ggsave()" que genera una imagen, la cual contiene la gráfica.
+     */
     private fun graficoTotalToneladasResiduoDistrito(listaResiduos: DataFrame<Residuo>, distrito: String, pathDestino: String) {
         logger.info("Creando gráfico con el total de toneladas por residuo en $distrito.")
         val res = listaResiduos
@@ -466,8 +593,14 @@ class ProcesamientoDatos {
         ggsave(fig, path = path + File.separator, filename = "toneladas_tipo_$distrito.png")
     }
 
-//TODO: Mirar desviación
-    private fun estadisticasMensualesPorTipoEnDistrito(listaResiduos: DataFrame<Residuo>, distrito: String): DataFrame<Residuo> {
+    /**
+     * Este método se ocupa de la consulta del máximo, mínimo , media y desviación por mes por residuo en dicho distrito.
+     *
+     * @param listaResiduos Dataframe necesario para la realización de dicha consulta.
+     *
+     * @return La consulta indicada, la cual luego será pasada como un valor al HTML.
+     */
+    private fun estadisticasMensualesPorTipoEnDistrito(listaResiduos: DataFrame<Residuo>, distrito: String): String {
         logger.info("Consultando máximo, mínimo , media y desviación por mes por residuo en $distrito.")
         return listaResiduos
             .filter { it["nombreDistrito"] == distrito }
@@ -478,8 +611,16 @@ class ProcesamientoDatos {
                 max("toneladas") into "Máximo"
                 std("toneladas").toString() into "Desviación"
             }
+            .html()
     }
 
+    /**
+     * Este método se ocupa de crear el gráfico del máximo, mínimo y media por meses en dicho distrito.
+     *
+     * @param listaResiduos Dataframe necesario para la realización de dicha consulta.
+     *
+     * @return No devuelve un lista, sino que llama a un método llamado "ggsave()" que genera una imagen, la cual contiene la gráfica.
+     */
     private fun graficoMaxMinMediaPorMeses(listaResiduos: DataFrame<Residuo>, distrito: String, pathDestino: String) {
         logger.info("Creando gráfica del máximo, mínimo y media por meses en $distrito.")
         val res = listaResiduos.filter { it["nombreDistrito"] == distrito }

@@ -1,10 +1,13 @@
+/**
+ * @author Mireya Sánchez Pinzón
+ * @author Alejandro Sánchez Monzón
+ */
+
 package models
 
 import mu.KotlinLogging
 import java.time.LocalDateTime
 import java.util.*
-
-private val logger = KotlinLogging.logger{}
 
 data class Bitacora(
     val id: UUID,
@@ -20,6 +23,15 @@ enum class TipoOpcion {
     RESUMEN_CIUDAD;
 
     companion object {
+        /**
+         * Función que parsea los Enums del objeto Bitacora. Indicando su equivalencia al valor de tipo String.
+         *
+         * @param opcion El enum en formato String equivalente al valor de la clase Enum.
+         *
+         * @throws IllegalArgumentException Excepción que el método lanzará si el String que trata de parsear no eixste, o el tipo no existe.
+         *
+         * @return TipoOpcion, un enum que variará dependiendo del valor de dicha variable.
+         */
         fun from(opcion: String): TipoOpcion{
             return when (opcion.uppercase()) {
                 "PARSER" -> PARSER

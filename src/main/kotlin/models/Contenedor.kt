@@ -1,10 +1,13 @@
+/**
+ * @author Mireya Sánchez Pinzón
+ * @author Alejandro Sánchez Monzón
+ */
+
 package models
 
 import dto.IAlmacenable
 import mu.KotlinLogging
 import org.jetbrains.kotlinx.dataframe.annotations.DataSchema
-
-private val logger = KotlinLogging.logger{}
 
 @DataSchema
 data class Contenedor(
@@ -26,6 +29,11 @@ data class Contenedor(
     val direccion: String
 
 ){
+    /**
+     * Método que escribe una lista con las variables del objeto Contenedor y el valor de cada una de ellas.
+     *
+     * @return String, la lista escrita con las varables del objeto.
+     */
     override fun toString(): String {
         return "Contenedor(codigo=$codigo, tipo=$tipo," +
                 " modelo='$modelo', descripcion='$descripcion'," +
@@ -44,6 +52,15 @@ enum class TipoContenedor(val tipo: String) {
     PAPEL_CARTON("PAPEL-CARTON");
 
     companion object {
+        /**
+         * Función que parsea los Enums del objeto Contenedor. Indicando su equivalencia al valor de tipo String.
+         *
+         * @param tipo El enum en formato String equivalente al valor de la clase Enum.
+         *
+         * @throws IllegalArgumentException Excepción que el método lanzará si el String que trata de parsear no eixste, o el tipo no existe.
+         *
+         * @return TipoContenedor, un enum que variará dependiendo del valor de dicha variable.
+         */
         fun from(tipo: String): TipoContenedor {
             return when (tipo.uppercase()) {
                 "ORGANICA" -> ORGANICA
@@ -78,6 +95,15 @@ enum class TipoVia(val tipo: String) {
     CARRERA("CARRERA");
 
     companion object {
+        /**
+         * Función que parsea los Enums del objeto Contenedor. Indicando su equivalencia al valor de tipo String.
+         *
+         * @param via El enum en formato String equivalente al valor de la clase Enum.
+         *
+         * @throws IllegalArgumentException Excepción que el método lanzará si el String que trata de parsear no eixste, o el tipo no existe.
+         *
+         * @return TipoVía, un enum que variará dependiendo del valor de dicha variable.
+         */
         fun from(via: String): TipoVia {
             return when (via.uppercase()) {
                 "CALLE" -> CALLE
