@@ -21,6 +21,7 @@ private val logger = KotlinLogging.logger{}
         val numberArgs = args.size
 
         if (args[0].uppercase() == "PARSER" && numberArgs == 3) {
+            //TODO: implementar tests parser
             val pathOrigen = args[1]
             val pathDestino = args[2]
 

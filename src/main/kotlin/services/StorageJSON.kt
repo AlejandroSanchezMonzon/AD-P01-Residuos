@@ -10,6 +10,7 @@ import java.io.File
 private val logger = KotlinLogging.logger{}
 
 class StorageJSON {
+    //TODO: implementar lectura
     fun writeResiduo(directorio: String, residuoDTO: List<ResiduoDTO>) {
         logger.info("Escribiendo JSON.")
         val ficheroResiduo = File(directorio + File.separator + "residuos_resultado_parser.json")
