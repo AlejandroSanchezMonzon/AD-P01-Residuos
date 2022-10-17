@@ -1,20 +1,20 @@
 package services
 
 import dto.ContenedorDTO
-import dto.IAlmacenable
 import dto.ResiduoDTO
 import mu.KotlinLogging
 import utils.parseDouble
 import utils.parseNull
+import utils.validateFileExtension
 import java.io.File
 
 private val logger = KotlinLogging.logger{}
 
-class StorageCSV{
+class StorageCSV {
     fun readResiduo(directorio: String): List<ResiduoDTO>{
         logger.info("Leyendo CSV.")
         val ficheroResiduo = File(directorio + File.separator + "modelo_residuos_2021.csv")
-        if(ficheroResiduo.exists()){
+        if(ficheroResiduo.exists() && validateFileExtension(ficheroResiduo.toString())){
             return ficheroResiduo.readLines().drop(1)
                 .map{it.split(";")}
                 .map{campo ->
@@ -25,11 +25,10 @@ class StorageCSV{
                         tipo = campo[3],
                         distrito = campo[4].toInt(),
                         nombreDistrito = campo[5],
-                        //Cuidado con las comas del double.
                         toneladas = parseDouble(campo[6]),
                     )
                 }
-        }else{
+        } else {
             throw IllegalArgumentException("El fichero ${ficheroResiduo.absolutePath} no existe");
         }
     }
@@ -46,7 +45,7 @@ class StorageCSV{
     fun readContenedor(directorio: String): List<ContenedorDTO>{
         logger.info("Leyendo CSV.")
         val ficheroContenedor = File(directorio + File.separator + "contenedores_varios.csv")
-        if(ficheroContenedor.exists()){
+        if(ficheroContenedor.exists() && validateFileExtension(ficheroContenedor.toString())){
             return ficheroContenedor.readLines().drop(1)
                 .map{it.split(";")}
                 .map{campo ->
@@ -67,10 +66,9 @@ class StorageCSV{
                         longitud = campo[13],
                         latitud = campo[14],
                         direccion = campo[15]
-
                         )
                 }
-        }else{
+        } else {
             throw IllegalArgumentException("El fichero ${ficheroContenedor.absolutePath} no existe");
         }
     }

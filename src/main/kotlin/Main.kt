@@ -1,6 +1,5 @@
 import controllers.ProcesamientoDatos
 import mu.KotlinLogging
-import utils.validateFileExtension
 import utils.validatePath
 
 private val logger = KotlinLogging.logger{}
@@ -24,7 +23,7 @@ private val logger = KotlinLogging.logger{}
             val pathOrigen = args[1]
             val pathDestino = args[2]
 
-            if (validateFileExtension(pathOrigen)) {
+            if (validatePath(pathOrigen) && validatePath(pathDestino)) {
                 procesamientoDatos.opcionParser(pathOrigen, pathDestino)
                 //TODO: preguntar si hay que leer también de JSON y XML.
 
@@ -36,7 +35,7 @@ private val logger = KotlinLogging.logger{}
             val pathOrigen = args[1]
             val pathDestino = args[2]
 
-            if (validateFileExtension(pathOrigen) && validatePath(pathOrigen) && validatePath(pathDestino)) {
+            if (validatePath(pathOrigen) && validatePath(pathDestino)) {
                 procesamientoDatos.opcionResumen(pathOrigen, pathDestino)
 
             } else {
@@ -48,7 +47,7 @@ private val logger = KotlinLogging.logger{}
             val pathOrigen = args[2]
             val pathDestino = args[3]
 
-            if (validateFileExtension(pathOrigen) && validatePath(pathOrigen) && validatePath(pathDestino)) {
+            if (validatePath(pathOrigen) && validatePath(pathDestino)) {
                 procesamientoDatos.opcionResumenDistrito(args[1], pathOrigen, pathDestino)
 
             } else {
