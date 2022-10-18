@@ -5,14 +5,11 @@
 
 package models
 
-import dto.IAlmacenable
-import mu.KotlinLogging
 import org.jetbrains.kotlinx.dataframe.annotations.DataSchema
 
 
 @DataSchema
 data class Residuo(
-    //TODO: optimización tipo dato
     val anio: Int,
     val mes: String,
     val lote: Int,
