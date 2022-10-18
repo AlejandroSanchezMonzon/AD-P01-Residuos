@@ -26,6 +26,7 @@ import org.jetbrains.letsPlot.label.labs
 import org.jetbrains.letsPlot.letsPlot
 import services.*
 import utils.dateFormatter
+import utils.parseDistrito
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
@@ -145,7 +146,7 @@ class ProcesamientoDatos {
                         <body>
                         <hr>
 
-                            <h1>Resumen de recogidas de basura y reciclaje de </h1>
+                            <h1>Resumen de recogidas de basura y reciclaje de Madrid</h1>
                             <p>Fecha de generación: ${dateFormatter(LocalDateTime.now())}</p>
                             <p>Autores: Alejandro Sánchez Monzón - Mireya Sánchez Pinzón</p>
 
@@ -527,8 +528,9 @@ class ProcesamientoDatos {
      */
     private fun numeroContenedoresPorTipoEnDistrito(listaContenedores: DataFrame<Contenedor>, distrito: String): String {
         logger.info("Consultando número de contenedores de cada tipo que hay en $distrito")
+
         return listaContenedores
-            .filter { it["distrito"] == distrito.uppercase() }
+            .filter { it["distrito"] == parseDistrito(distrito)}
             .groupBy("distrito", "tipo")
             .aggregate {
                 sum("cantidad") into "NumeroContenedores"
@@ -604,7 +606,7 @@ class ProcesamientoDatos {
         logger.info("Consultando máximo, mínimo , media y desviación por mes por residuo en $distrito.")
         return listaResiduos
             .filter { it["nombreDistrito"] == distrito }
-            .groupBy("nombreDistrito", "tipo", "mes")
+            .groupBy("nombreDistrito", "tipo", "anio")
             .aggregate {
                 mean("toneladas") into "Media"
                 min("toneladas") into "Mínimo"
