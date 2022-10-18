@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.com.intellij.openapi.vfs.StandardFileSystems.jar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -17,7 +16,13 @@ repositories {
 
 tasks {
     val fatJar = register<Jar>("fatJar") {
-        dependsOn.addAll(listOf("compileJava", "compileKotlin", "processResources")) // We need this for Gradle optimization to work
+        dependsOn.addAll(
+            listOf(
+                "compileJava",
+                "compileKotlin",
+                "processResources"
+            )
+        ) // We need this for Gradle optimization to work
         archiveClassifier.set("standalone") // Naming the jar
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         manifest { attributes(mapOf("Main-Class" to application.mainClass)) } // Provided we set it up in the application plugin configuration
@@ -50,13 +55,13 @@ dependencies {
     implementation("org.jetbrains.lets-plot:lets-plot-image-export:2.5.0")
 
     // Loggers para Kotlin
-    implementation ("io.github.microutils:kotlin-logging-jvm:3.0.0")
+    implementation("io.github.microutils:kotlin-logging-jvm:3.0.0")
     implementation("ch.qos.logback:logback-classic:1.4.3")
     implementation("ch.qos.logback:logback-core:1.4.3")
-    
+
     //Doka para sustituir a JDOC y KDOC
     implementation("org.jetbrains.dokka:kotlin-as-java-plugin:1.7.20")
-    
+
     // JUnit para tests
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.1")
 }

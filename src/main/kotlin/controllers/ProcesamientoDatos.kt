@@ -105,14 +105,67 @@ class ProcesamientoDatos {
      */
     fun opcionResumen(pathOrigen: String, pathDestino: String) {
         logger.info("Ejecutando opción resumen global.")
-        val listaResiduos = storageCSV
-            .readResiduo(pathOrigen)
-            .map { it.toResiduo() }
-            .toDataFrame()
-        val listaContenedores = storageCSV
-            .readContenedor(pathOrigen)
-            .map { it.toContenedor() }
-            .toDataFrame()
+        var listaResiduos : DataFrame<Residuo> = DataFrame.empty() as DataFrame<Residuo>
+
+        var listaContenedores : DataFrame<Contenedor> = DataFrame.empty() as DataFrame<Contenedor>
+
+        if (
+            File(pathOrigen + File.separator + "modelo_residuos_2021.csv").exists() &&
+            File(pathOrigen + File.separator + "contenedores_varios.csv").exists() ) {
+            listaResiduos = storageCSV
+                .readResiduo(pathOrigen)
+                .map { it.toResiduo() }
+                .toDataFrame()
+
+            listaContenedores = storageCSV
+                .readContenedor(pathOrigen)
+                .map { it.toContenedor() }
+                .toDataFrame()
+
+        }else if(
+            File(pathOrigen + File.separator + "residuos_resultado_parser.csv").exists() &&
+            File(pathOrigen + File.separator + "contenedores_resultado_parser.csv").exists() ) {
+            listaResiduos = storageCSV
+                .readResiduo(pathOrigen + File.separator + "residuos_resultado_parser.csv")
+                .map { it.toResiduo() }
+                .toDataFrame()
+
+            listaContenedores = storageCSV
+                .readContenedor(pathOrigen + File.separator + "contenedores_resultado_parser.csv")
+                .map { it.toContenedor() }
+                .toDataFrame()
+
+        }else if(
+            File(pathOrigen + File.separator + "residuos_resultado_parser.json").exists() &&
+            File(pathOrigen + File.separator + "contenedores_resultado_parser.json").exists() ) {
+            listaResiduos = storageJSON
+                .readResiduo(pathOrigen)
+                .map { it.toResiduo() }
+                .toDataFrame()
+
+            listaContenedores = storageJSON
+                .readContenedor(pathOrigen)
+                .map { it.toContenedor() }
+                .toDataFrame()
+
+        }else if(
+            File(pathOrigen + File.separator + "residuos_resultado_parser.xml").exists() &&
+            File(pathOrigen + File.separator + "contenedores_resultado_parser.xml").exists() ) {
+            listaResiduos = storageXML
+                .readResiduo(pathOrigen)
+                .map { it.toResiduo() }
+                .toDataFrame()
+
+            listaContenedores = storageXML
+                .readContenedor(pathOrigen)
+                .map { it.toContenedor() }
+                .toDataFrame()
+
+        }else{
+            logger.error("Extensión de fichero no válida para la lectura.")
+        }
+
+
 
         var success = true
         var ejecutionTime = 0L
@@ -227,14 +280,65 @@ class ProcesamientoDatos {
      */
     fun opcionResumenDistrito(distrito: String, pathOrigen: String, pathDestino: String) {
         logger.info("Ejecutando opción resumen distrito concreto.")
-        val listaResiduos = storageCSV
-            .readResiduo(pathOrigen)
-            .map { it.toResiduo() }
-            .toDataFrame()
-        val listaContenedores = storageCSV
-            .readContenedor(pathOrigen)
-            .map { it.toContenedor() }
-            .toDataFrame()
+        var listaResiduos : DataFrame<Residuo> = DataFrame.empty() as DataFrame<Residuo>
+
+        var listaContenedores : DataFrame<Contenedor> = DataFrame.empty() as DataFrame<Contenedor>
+
+        if (
+            File(pathOrigen + File.separator + "modelo_residuos_2021.csv").exists() &&
+            File(pathOrigen + File.separator + "contenedores_varios.csv").exists() ) {
+            listaResiduos = storageCSV
+                .readResiduo(pathOrigen)
+                .map { it.toResiduo() }
+                .toDataFrame()
+
+            listaContenedores = storageCSV
+                .readContenedor(pathOrigen)
+                .map { it.toContenedor() }
+                .toDataFrame()
+
+        }else if(
+            File(pathOrigen + File.separator + "residuos_resultado_parser.csv").exists() &&
+            File(pathOrigen + File.separator + "contenedores_resultado_parser.csv").exists() ) {
+            listaResiduos = storageCSV
+                .readResiduo(pathOrigen + File.separator + "residuos_resultado_parser.csv")
+                .map { it.toResiduo() }
+                .toDataFrame()
+
+            listaContenedores = storageCSV
+                .readContenedor(pathOrigen + File.separator + "contenedores_resultado_parser.csv")
+                .map { it.toContenedor() }
+                .toDataFrame()
+
+        }else if(
+            File(pathOrigen + File.separator + "residuos_resultado_parser.json").exists() &&
+            File(pathOrigen + File.separator + "contenedores_resultado_parser.json").exists() ) {
+            listaResiduos = storageJSON
+                .readResiduo(pathOrigen)
+                .map { it.toResiduo() }
+                .toDataFrame()
+
+            listaContenedores = storageJSON
+                .readContenedor(pathOrigen)
+                .map { it.toContenedor() }
+                .toDataFrame()
+
+        }else if(
+            File(pathOrigen + File.separator + "residuos_resultado_parser.xml").exists() &&
+            File(pathOrigen + File.separator + "contenedores_resultado_parser.xml").exists() ) {
+            listaResiduos = storageXML
+                .readResiduo(pathOrigen)
+                .map { it.toResiduo() }
+                .toDataFrame()
+
+            listaContenedores = storageXML
+                .readContenedor(pathOrigen)
+                .map { it.toContenedor() }
+                .toDataFrame()
+
+        }else{
+            logger.error("Extensión de fichero no válida para la lectura.")
+        }
 
         var success = true
         var ejecutionTime = 0L

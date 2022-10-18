@@ -5,11 +5,10 @@
 
 package utils
 
-import dto.ResiduoDTO
 import mu.KotlinLogging
 import java.io.File
 
-private val logger = KotlinLogging.logger{}
+private val logger = KotlinLogging.logger {}
 
 /**
  * Función que analiza la extensión del fichero del archivo determinado, comprobando si este es un JSON, CSV o XML.

@@ -7,12 +7,11 @@ package dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import mu.KotlinLogging
 import nl.adaptivity.xmlutil.serialization.XmlElement
 
 @Serializable
 @SerialName("Residuo")
-data class ResiduoDTO (
+data class ResiduoDTO(
     @XmlElement(true)
     val anio: Int,
 

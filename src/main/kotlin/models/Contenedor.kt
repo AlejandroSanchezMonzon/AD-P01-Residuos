@@ -5,8 +5,6 @@
 
 package models
 
-import dto.IAlmacenable
-import mu.KotlinLogging
 import org.jetbrains.kotlinx.dataframe.annotations.DataSchema
 
 @DataSchema

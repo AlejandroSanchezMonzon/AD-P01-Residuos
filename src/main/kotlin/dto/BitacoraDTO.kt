@@ -7,13 +7,11 @@ package dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import mu.KotlinLogging
 import nl.adaptivity.xmlutil.serialization.XmlElement
-import java.time.LocalDateTime
 
 @Serializable
 @SerialName("Bitacora")
-data class BitacoraDTO (
+data class BitacoraDTO(
     @XmlElement(true)
     val id: String,
 

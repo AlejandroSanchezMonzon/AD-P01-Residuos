@@ -34,4 +34,20 @@ internal class ParsersTest {
         )
 
     }
+
+    @Test
+    @DisplayName("Formatenado distritos, quitando tilde y  poniendolos en mayúsculas.")
+    fun parseDistritoTest() {
+        val distritoTrue = "CHAMBERI"
+        val distritoFalse1 = "Chamberi"
+        val distritoFalse2 = "Chamberí"
+        val distritoFalse3 = "CHAMBERÍ"
+
+        Assertions.assertAll (
+            { assertEquals(distritoTrue, parseDistrito("Chamberí"))},
+            { assertNotEquals(distritoFalse1, parseDistrito("Chamberí"))},
+            { assertNotEquals(distritoFalse2, parseDistrito("Chamberí"))},
+            { assertNotEquals(distritoFalse3, parseDistrito("Chamberí"))}
+        )
+    }
 }
