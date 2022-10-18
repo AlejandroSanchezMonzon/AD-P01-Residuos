@@ -11,10 +11,7 @@ private val logger = KotlinLogging.logger{}
 
     fun main(args: Array<String>) {
         logger.info("Iniciando programa...")
-        //checkArgs(args)
-
-        val procesamientoDatos = ProcesamientoDatos()
-        procesamientoDatos.opcionResumen("src/main/resources", "data/output")
+        checkArgs(args)
     }
 
     /**
@@ -37,13 +34,11 @@ private val logger = KotlinLogging.logger{}
         val numberArgs = args.size
 
         if (args[0].uppercase() == "PARSER" && numberArgs == 3) {
-            //TODO: implementar tests parser
             val pathOrigen = args[1]
             val pathDestino = args[2]
 
             if (validatePath(pathOrigen) && validatePath(pathDestino)) {
                 procesamientoDatos.opcionParser(pathOrigen, pathDestino)
-                //TODO: preguntar si hay que leer también de JSON y XML.
 
             } else {
                 logger.error("Path no válido.")
