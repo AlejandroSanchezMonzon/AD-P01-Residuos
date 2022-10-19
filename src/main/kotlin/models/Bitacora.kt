@@ -9,10 +9,9 @@ import mu.KotlinLogging
 import java.time.LocalDateTime
 import java.util.*
 
-private val logger = KotlinLogging.logger{}
+private val logger = KotlinLogging.logger {}
 
 
-//TODO: encerrarlas en una lista
 data class Bitacora(
     val id: UUID,
     val instante: LocalDateTime,
@@ -36,7 +35,7 @@ enum class TipoOpcion {
          *
          * @return TipoOpcion, un enum que variará dependiendo del valor de dicha variable.
          */
-        fun from(opcion: String): TipoOpcion{
+        fun from(opcion: String): TipoOpcion {
             return when (opcion.uppercase()) {
                 "PARSER" -> PARSER
                 "RESUMEN GLOBAL" -> RESUMEN_GLOBAL

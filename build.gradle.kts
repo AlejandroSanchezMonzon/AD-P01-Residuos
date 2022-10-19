@@ -59,7 +59,7 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.4.3")
     implementation("ch.qos.logback:logback-core:1.4.3")
 
-    //Doka para sustituir a JDOC y KDOC
+    //Dokka para sustituir a JDOC y KDOC
     implementation("org.jetbrains.dokka:kotlin-as-java-plugin:1.7.20")
 
     // JUnit para tests

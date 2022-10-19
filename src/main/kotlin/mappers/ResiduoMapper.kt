@@ -10,7 +10,7 @@ import models.Residuo
 import models.TipoResiduo
 import mu.KotlinLogging
 
-private val logger = KotlinLogging.logger{}
+private val logger = KotlinLogging.logger {}
 
 /**
  * Este método se ocupa de convertir el objeto creado (ResiduoDTO) en un objeto de tipos complejos para poder
@@ -20,30 +20,11 @@ private val logger = KotlinLogging.logger{}
  */
 fun ResiduoDTO.toResiduo(): Residuo {
     logger.info("Mapeando DTO a Residuo.")
-    return Residuo (
+    return Residuo(
         anio = this.anio,
         mes = this.mes,
         lote = this.lote,
         tipo = TipoResiduo.from(this.tipo),
-        distrito = this.distrito,
-        nombreDistrito = this.nombreDistrito,
-        toneladas = this.toneladas
-    )
-}
-
-/**
- * Este método se ocupa de convertir el objeto creado (Residuo) en un objeto de tipos simples (DTO) para poder
- * pasar la información del mismo a ficheros de una forma más sencilla, evitando los tipos complejos.
- *
- * @return ResiduoDTO, un objeto DTO de tipos simples (String, por ejemplo).
- */
-fun Residuo.toDTO(): ResiduoDTO {
-    logger.info("Mapeando Residuo a DTO.")
-    return ResiduoDTO(
-        anio = this.anio,
-        mes = this.mes,
-        lote = this.lote,
-        tipo = this.tipo.tipo,
         distrito = this.distrito,
         nombreDistrito = this.nombreDistrito,
         toneladas = this.toneladas
