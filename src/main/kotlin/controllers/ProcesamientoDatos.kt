@@ -61,6 +61,7 @@ class ProcesamientoDatos {
     fun opcionParser(pathOrigen: String, pathDestino: String) {
         logger.info("Ejecutando opción parser.")
         var success = true
+        
         var ejecutionTime = 0L
 
         try {
@@ -77,11 +78,11 @@ class ProcesamientoDatos {
                 storageJSON.writeContenedor(pathDestino, listaContenedoresDTO)
                 storageXML.writeContenedor(pathDestino, listaContenedoresDTO)
             }
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             success = false
 
 
-            when(e){
+            when (e) {
                 is IllegalArgumentException -> logger.error(e.message)
             }
 
@@ -105,13 +106,14 @@ class ProcesamientoDatos {
      */
     fun opcionResumen(pathOrigen: String, pathDestino: String) {
         logger.info("Ejecutando opción resumen global.")
-        var listaResiduos : DataFrame<Residuo> = DataFrame.empty() as DataFrame<Residuo>
+        var listaResiduos: DataFrame<Residuo> = DataFrame.empty() as DataFrame<Residuo>
 
-        var listaContenedores : DataFrame<Contenedor> = DataFrame.empty() as DataFrame<Contenedor>
+        var listaContenedores: DataFrame<Contenedor> = DataFrame.empty() as DataFrame<Contenedor>
 
         if (
             File(pathOrigen + File.separator + "modelo_residuos_2021.csv").exists() &&
-            File(pathOrigen + File.separator + "contenedores_varios.csv").exists() ) {
+            File(pathOrigen + File.separator + "contenedores_varios.csv").exists()
+        ) {
             listaResiduos = storageCSV
                 .readResiduo(pathOrigen)
                 .map { it.toResiduo() }
@@ -122,9 +124,10 @@ class ProcesamientoDatos {
                 .map { it.toContenedor() }
                 .toDataFrame()
 
-        }else if(
+        } else if (
             File(pathOrigen + File.separator + "residuos_resultado_parser.csv").exists() &&
-            File(pathOrigen + File.separator + "contenedores_resultado_parser.csv").exists() ) {
+            File(pathOrigen + File.separator + "contenedores_resultado_parser.csv").exists()
+        ) {
             listaResiduos = storageCSV
                 .readResiduo(pathOrigen + File.separator + "residuos_resultado_parser.csv")
                 .map { it.toResiduo() }
@@ -135,9 +138,10 @@ class ProcesamientoDatos {
                 .map { it.toContenedor() }
                 .toDataFrame()
 
-        }else if(
+        } else if (
             File(pathOrigen + File.separator + "residuos_resultado_parser.json").exists() &&
-            File(pathOrigen + File.separator + "contenedores_resultado_parser.json").exists() ) {
+            File(pathOrigen + File.separator + "contenedores_resultado_parser.json").exists()
+        ) {
             listaResiduos = storageJSON
                 .readResiduo(pathOrigen)
                 .map { it.toResiduo() }
@@ -148,9 +152,10 @@ class ProcesamientoDatos {
                 .map { it.toContenedor() }
                 .toDataFrame()
 
-        }else if(
+        } else if (
             File(pathOrigen + File.separator + "residuos_resultado_parser.xml").exists() &&
-            File(pathOrigen + File.separator + "contenedores_resultado_parser.xml").exists() ) {
+            File(pathOrigen + File.separator + "contenedores_resultado_parser.xml").exists()
+        ) {
             listaResiduos = storageXML
                 .readResiduo(pathOrigen)
                 .map { it.toResiduo() }
@@ -161,10 +166,9 @@ class ProcesamientoDatos {
                 .map { it.toContenedor() }
                 .toDataFrame()
 
-        }else{
+        } else {
             logger.error("Extensión de fichero no válida para la lectura.")
         }
-
 
 
         var success = true
@@ -252,16 +256,17 @@ class ProcesamientoDatos {
             logger.info("Creando archivo html.")
             serviceCSS.writeCSS(pathDestino)
             serviceHTML.writeHTML(pathDestino, html)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             success = false
 
-            when(e){
-                is IOException -> logger.error {"Path incorrecto."}
+            when (e) {
+                is IOException -> logger.error { "Path incorrecto." }
             }
         }
 
         logger.info("Creando archivo bitácora.")
-        val bitacora = Bitacora(UUID.randomUUID(), LocalDateTime.now(), TipoOpcion.RESUMEN_GLOBAL, success, ejecutionTime)
+        val bitacora =
+            Bitacora(UUID.randomUUID(), LocalDateTime.now(), TipoOpcion.RESUMEN_GLOBAL, success, ejecutionTime)
         storageXML.writeBitacora(pathDestino, bitacora.toDTO())
 
     }
@@ -280,13 +285,14 @@ class ProcesamientoDatos {
      */
     fun opcionResumenDistrito(distrito: String, pathOrigen: String, pathDestino: String) {
         logger.info("Ejecutando opción resumen distrito concreto.")
-        var listaResiduos : DataFrame<Residuo> = DataFrame.empty() as DataFrame<Residuo>
+        var listaResiduos: DataFrame<Residuo> = DataFrame.empty() as DataFrame<Residuo>
 
-        var listaContenedores : DataFrame<Contenedor> = DataFrame.empty() as DataFrame<Contenedor>
+        var listaContenedores: DataFrame<Contenedor> = DataFrame.empty() as DataFrame<Contenedor>
 
         if (
             File(pathOrigen + File.separator + "modelo_residuos_2021.csv").exists() &&
-            File(pathOrigen + File.separator + "contenedores_varios.csv").exists() ) {
+            File(pathOrigen + File.separator + "contenedores_varios.csv").exists()
+        ) {
             listaResiduos = storageCSV
                 .readResiduo(pathOrigen)
                 .map { it.toResiduo() }
@@ -297,9 +303,10 @@ class ProcesamientoDatos {
                 .map { it.toContenedor() }
                 .toDataFrame()
 
-        }else if(
+        } else if (
             File(pathOrigen + File.separator + "residuos_resultado_parser.csv").exists() &&
-            File(pathOrigen + File.separator + "contenedores_resultado_parser.csv").exists() ) {
+            File(pathOrigen + File.separator + "contenedores_resultado_parser.csv").exists()
+        ) {
             listaResiduos = storageCSV
                 .readResiduo(pathOrigen + File.separator + "residuos_resultado_parser.csv")
                 .map { it.toResiduo() }
@@ -310,9 +317,10 @@ class ProcesamientoDatos {
                 .map { it.toContenedor() }
                 .toDataFrame()
 
-        }else if(
+        } else if (
             File(pathOrigen + File.separator + "residuos_resultado_parser.json").exists() &&
-            File(pathOrigen + File.separator + "contenedores_resultado_parser.json").exists() ) {
+            File(pathOrigen + File.separator + "contenedores_resultado_parser.json").exists()
+        ) {
             listaResiduos = storageJSON
                 .readResiduo(pathOrigen)
                 .map { it.toResiduo() }
@@ -323,9 +331,10 @@ class ProcesamientoDatos {
                 .map { it.toContenedor() }
                 .toDataFrame()
 
-        }else if(
+        } else if (
             File(pathOrigen + File.separator + "residuos_resultado_parser.xml").exists() &&
-            File(pathOrigen + File.separator + "contenedores_resultado_parser.xml").exists() ) {
+            File(pathOrigen + File.separator + "contenedores_resultado_parser.xml").exists()
+        ) {
             listaResiduos = storageXML
                 .readResiduo(pathOrigen)
                 .map { it.toResiduo() }
@@ -336,7 +345,7 @@ class ProcesamientoDatos {
                 .map { it.toContenedor() }
                 .toDataFrame()
 
-        }else{
+        } else {
             logger.error("Extensión de fichero no válida para la lectura.")
         }
 
@@ -411,16 +420,17 @@ class ProcesamientoDatos {
             serviceCSS.writeCSS(pathDestino)
             serviceHTML.writeHTMLDistrito(pathDestino, html, distrito)
 
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             success = false
 
-            when(e){
-                is IOException -> logger.error {"Path incorrecto."}
+            when (e) {
+                is IOException -> logger.error { "Path incorrecto." }
             }
         }
 
         logger.info("Creando archivo bitácora.")
-        val bitacora = Bitacora(UUID.randomUUID(), LocalDateTime.now(), TipoOpcion.RESUMEN_CIUDAD, success, ejecutionTime)
+        val bitacora =
+            Bitacora(UUID.randomUUID(), LocalDateTime.now(), TipoOpcion.RESUMEN_CIUDAD, success, ejecutionTime)
         storageXML.writeBitacora(pathDestino, bitacora.toDTO())
 
     }
@@ -630,11 +640,14 @@ class ProcesamientoDatos {
      *
      * @return La consulta indicada, la cual luego será pasada como un valor al HTML.
      */
-    private fun numeroContenedoresPorTipoEnDistrito(listaContenedores: DataFrame<Contenedor>, distrito: String): String {
+    private fun numeroContenedoresPorTipoEnDistrito(
+        listaContenedores: DataFrame<Contenedor>,
+        distrito: String
+    ): String {
         logger.info("Consultando número de contenedores de cada tipo que hay en $distrito")
 
         return listaContenedores
-            .filter { it["distrito"] == parseDistrito(distrito)}
+            .filter { it["distrito"] == parseDistrito(distrito) }
             .groupBy("distrito", "tipo")
             .aggregate {
                 sum("cantidad") into "NumeroContenedores"
@@ -667,7 +680,11 @@ class ProcesamientoDatos {
      *
      * @return No devuelve un lista, sino que llama a un método llamado "ggsave()" que genera una imagen, la cual contiene la gráfica.
      */
-    private fun graficoTotalToneladasResiduoDistrito(listaResiduos: DataFrame<Residuo>, distrito: String, pathDestino: String) {
+    private fun graficoTotalToneladasResiduoDistrito(
+        listaResiduos: DataFrame<Residuo>,
+        distrito: String,
+        pathDestino: String
+    ) {
         logger.info("Creando gráfico con el total de toneladas por residuo en $distrito.")
         val res = listaResiduos
             .filter { it["nombreDistrito"] == distrito }
@@ -723,7 +740,7 @@ class ProcesamientoDatos {
     /**
      * Este método se ocupa de crear el gráfico del máximo, mínimo y media por meses en dicho distrito.
      *
-     * @param listaResiduos Dataframe necesario para la realización de dicha consulta.
+     * @param listaResiduos Datasbframe necesario para la realización de dicha consulta.
      *
      * @return No devuelve un lista, sino que llama a un método llamado "ggsave()" que genera una imagen, la cual contiene la gráfica.
      */
