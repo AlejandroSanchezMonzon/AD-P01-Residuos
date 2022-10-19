@@ -12,6 +12,7 @@ private val logger = KotlinLogging.logger {}
 fun main(args: Array<String>) {
     logger.info("Iniciando programa...")
     checkArgs(args)
+
 }
 
 /**
@@ -27,7 +28,7 @@ fun checkArgs(args: Array<String>) {
     val procesamientoDatos = ProcesamientoDatos()
 
     try {
-        if (args.size < 2 || args.size > 4) {
+        if (args.size < 3 || args.size > 4) {
             logger.error("Argumentos no válidos.")
         }
     } catch (e: IndexOutOfBoundsException) {
